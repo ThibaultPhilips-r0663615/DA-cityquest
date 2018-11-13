@@ -1,17 +1,33 @@
 package idk.model;
 
+import idk.implementation.CoordinatesConverter;
+import idk.implementation.QuestionsConverter;
 import idk.model.Question.QuestionBuilder;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Entity
 public class Game {
+
+    @Id
+    @GeneratedValue
+    private UUID id;
     private String name, location, description;
+    @Convert(converter = CoordinatesConverter.class)
     private Coordinates coordinates;
+    @Lob
+    @Convert(converter = QuestionsConverter.class)
     private List<Question> questions = new ArrayList<>();
 
     public Game(){
 
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -52,6 +68,10 @@ public class Game {
 
     public List<Question> getQuestions() {
         return questions;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public static class GameBuilder{
