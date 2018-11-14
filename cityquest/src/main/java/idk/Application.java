@@ -16,6 +16,7 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+    // Why comment: @Bean => word uitgevoerd bij opstarten app. => geen void returne => error want bean mag geen void zijn
     @Bean
     public CommandLineRunner demo(GameRepository repository) {
         return (args) -> {

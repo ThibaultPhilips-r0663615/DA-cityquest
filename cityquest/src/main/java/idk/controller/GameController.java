@@ -18,7 +18,13 @@ import static idk.model.Question.QuestionBuilder.aQuestion;
 @RestController
 public class GameController {
 
-    @Autowired private GameRepository gameRepository;
+    private GameRepository gameRepository;
+
+    // Geen autowired recuired => gebeurt automatisch wanneer je parameeter meegeeft aan constructor
+    // Bean wordt aangemaakt door interface die CrudRepository implementeert.
+    public GameController(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
+    }
 
     @RequestMapping("/getGames")
     public List<Game> getGames() {
