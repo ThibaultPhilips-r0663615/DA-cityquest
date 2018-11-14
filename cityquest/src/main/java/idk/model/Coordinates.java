@@ -1,22 +1,22 @@
 package idk.model;
 
 public class Coordinates {
-    private double longitude, altitude;
+    private double longitude, latitude;
 
     public Coordinates() {
         // Why comment : CoordinatesConverter uses default constructor
     }
 
-    public Coordinates(double longitude, double altitude){
+    public Coordinates(double longitude, double latitude){
         this.longitude = longitude;
-        this.altitude = altitude;
+        this.latitude = latitude;
     }
 
     public double getLongitude() {
         return longitude;
     }
 
-    public double getAltitude() {
-        return altitude;
+    public double getLatitude() {
+        return latitude;
     }
 }
