@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Question {
-    private String question, extraInfo;
+    private String question, extraInformation;
     private Coordinates coordinates;
     private int correctAnswer;
-    private List<String> answer = new ArrayList<>();
+    private List<String> answers = new ArrayList<>();
 
     public Question(){
 
@@ -25,12 +25,12 @@ public class Question {
         this.coordinates = coordinates;
     }
 
-    public void setAnswer(List<String> answer) {
-        this.answer = answer;
+    public void setAnswers(List<String> answers) {
+        this.answers = answers;
     }
 
-    public void setExtraInfo(String extraInfo) {
-        this.extraInfo = extraInfo;
+    public void setExtraInformation(String extraInformation) {
+        this.extraInformation = extraInformation;
     }
 
     public String getQuestion() {
@@ -45,12 +45,12 @@ public class Question {
         return coordinates;
     }
 
-    public List<String> getAnswer() {
-        return answer;
+    public List<String> getAnswers() {
+        return answers;
     }
 
-    public String getExtraInfo() {
-        return extraInfo;
+    public String getExtraInformation() {
+        return extraInformation;
     }
     
     public static class QuestionBuilder{
@@ -103,8 +103,8 @@ public class Question {
             question.question = this.question;
             question.correctAnswer = this.correctAnswer;
             question.coordinates = this.coordinates;
-            question.answer = this.answer;
-            question.extraInfo = this.extraInfo;
+            question.answers = this.answer;
+            question.extraInformation = this.extraInfo;
             return question;
 
         }

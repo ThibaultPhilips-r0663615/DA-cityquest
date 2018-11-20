@@ -1,6 +1,8 @@
 package idk.controller;
 
 import idk.database.GameRepository;
+import idk.implementation.GeoDistComparator;
+import idk.model.Coordinates;
 import idk.model.Game;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,15 @@ public class GameController {
     @RequestMapping(method = RequestMethod.POST)
     public Game addGame(@RequestBody Game game){
         return gameRepository.save(game);
+    }
+
+    @RequestMapping(path = "/near", method = RequestMethod.GET)
+    public List<Game> getGamesOrdered(@RequestParam("lon") double lon, @RequestParam("lat") double lat){
+        return StreamSupport
+                .stream(gameRepository.findAll().spliterator(), false)
+                .peek(game -> game.setQuestions(new ArrayList<>()))
+                .sorted(new GeoDistComparator(new Coordinates(lon, lat)))
+                .collect(Collectors.toList());
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)

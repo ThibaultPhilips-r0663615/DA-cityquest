@@ -43,9 +43,9 @@ class GameList extends HTMLElement {
             let liDescription = document.createElement("li");
             liDescription.innerHTML = element.description;
             let liLongtitude = document.createElement("li");
-            liLongtitude.innerHTML = element.coordinates.longitude;
+            liLongtitude.innerHTML = element.coordinates.lon;
             let liLatitude = document.createElement("li");
-            liLatitude.innerHTML = element.coordinates.latitude;
+            liLatitude.innerHTML = element.coordinates.lat;
 
             innerUl.appendChild(liLocation); 
             innerUl.appendChild(liDescription); 
@@ -58,8 +58,6 @@ class GameList extends HTMLElement {
     get template() {
         return `
             <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>
-            <script src="/js/jquery-1.11.0.js" type="text/javascript"></script>
-            <script src="/js/jquery.js" type="text/javascript"></script>
             <style>
                 #gameList {
                     width: 40%;
