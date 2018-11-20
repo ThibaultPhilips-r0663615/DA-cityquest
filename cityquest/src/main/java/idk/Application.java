@@ -41,6 +41,48 @@ public class Application {
                                         .withExtraInfo("Question extra info")
                         )
                         .build());
+            repository.save(
+                    aGame()
+                            .withName("Overijse today")
+                            .withLocation("Overijse")
+                            .withDescription("A walk in the historic village of Overijse!")
+                            .withCoordinates(50.77381, 4.534750000000031)
+                            .withQuestion(
+                                    aQuestion()
+                                            .withQuestion("Why did the town hall change location?")
+                                            .withAnswer("Too expensive to maintain the building.")
+                                            .withAnswer("Too small for all the employees.")
+                                            .withCoordinates(50.773242668543425, 4.537661491748622)
+                                            .withCorrectAnswer(1)
+                                            .withExtraInfo("Question extra info")
+                            )
+                            .build());
+            repository.save(
+                    aGame()
+                            .withName("Explore Leuven")
+                            .withLocation("Leuven")
+                            .withDescription("Visit historic places around Leuven such as the vaartkom, city town hall, ...!")
+                            .withCoordinates(50.8798438, 4.7005167)
+                            .withQuestion(
+                                    aQuestion()
+                                            .withQuestion("How old is the vaartkom?")
+                                            .withAnswer("200 years")
+                                            .withAnswer("40 years")
+                                            .withAnswer("300 years")
+                                            .withCoordinates(50.8876555, 4.7031076)
+                                            .withCorrectAnswer(2)
+                                            .withExtraInfo("Question extra info")
+                            )
+                            .withQuestion(
+                            aQuestion()
+                                    .withQuestion("Why did the 'Foche plein' change name?")
+                                    .withAnswer("World war II reason.")
+                                    .withAnswer("Ugly name")
+                                    .withCoordinates(50.8791616, 4.70258300)
+                                    .withCorrectAnswer(0)
+                                    .withExtraInfo("Question extra info")
+                            )
+                            .build());
         };
     }
 
