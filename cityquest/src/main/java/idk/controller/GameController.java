@@ -65,5 +65,4 @@ public class GameController {
     @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
     private class MethodNotAllowedException extends RuntimeException {
     }
-
 }

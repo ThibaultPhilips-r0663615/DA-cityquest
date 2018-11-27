@@ -71,9 +71,11 @@ class GameList extends HTMLElement {
             let button = document.createElement("button");
             button.innerHTML = "Play";
             button.id = (element.id + "Button");
-            button.onclick =() => {
-                
-            };  
+            button.type = "button";
+            button.addEventListener("click", function(e){
+                e.stopPropagation();
+                window.location.href = ("gameDetails.html?id=" + element.id);
+            });
             liName.appendChild(pName);
             liName.appendChild(button);
             liName.onclick =() => this.displayDetails(element.id);
@@ -147,6 +149,7 @@ class GameList extends HTMLElement {
                     text-size: 10px;
                 }
             </style>
+            <h3>Games</h3>
             <ul id="gameList" class="list-group"></ul>
         `;
     }
