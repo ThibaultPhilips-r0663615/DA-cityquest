@@ -15,10 +15,9 @@ public class GeoDistComparator implements Comparator<Game> {
 
 	@Override
 	public int compare(Game o1, Game o2) {
-		double dist1 = o1.getCoordinates().dist(coordinates);
-		double dist2 = o2.getCoordinates().dist(coordinates);
+		double dist1 = o1.getCoordinates().distInKilometer(coordinates);
+		double dist2 = o2.getCoordinates().distInKilometer(coordinates);
 
-		return dist1 < dist2 ? -1 :
-				dist1 > dist2 ? 1 : 0;
+		return Double.compare(dist1, dist2);
 	}
 }
