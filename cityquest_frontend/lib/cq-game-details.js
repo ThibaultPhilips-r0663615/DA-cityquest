@@ -38,11 +38,7 @@ class CityQuestGameDetails extends HTMLElement {
         var myIcon = L.icon({
             iconUrl: './marker_black.png',
             iconSize: [40, 45],
-            iconAnchor: [40, 45],
-            popupAnchor: [-3, -76],
-            shadowUrl: '',
-            shadowSize: [40, 45],
-            shadowAnchor: [40, 45]
+            iconAnchor: [20, 45]
         });
         for(let i = 0; i < game.questions.length; i++){
             L
@@ -60,11 +56,7 @@ class CityQuestGameDetails extends HTMLElement {
         var myIcon2 = L.icon({
             iconUrl: './marker_red.png',
             iconSize: [40, 45],
-            iconAnchor: [40, 45],
-            popupAnchor: [-3, -76],
-            shadowUrl: '',
-            shadowSize: [40, 45],
-            shadowAnchor: [40, 45]
+            iconAnchor: [20, 45]
         });
         if(this.currentLocation) {
             this.currentLocation.setLatLng([coords.latitude, coords.longitude]);
