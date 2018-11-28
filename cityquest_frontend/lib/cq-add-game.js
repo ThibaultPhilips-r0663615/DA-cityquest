@@ -72,11 +72,14 @@ class CityQuestAddGame extends HTMLElement {
         index = 0;
         indexAnswers = 0;
 
-        let xmlhttp = new XMLHttpRequest();
-        var url = "http://localhost:8080/games";
-        xmlhttp.open("POST", url, true);
-        xmlhttp.setRequestHeader("Content-type", "application/json");
-        xmlhttp.send(JSON.stringify(game));
+        fetch("http://localhost:8080/games",
+        {
+            method: "POST",
+            headers:{
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(game)
+        })
 
         let form = this.shadowRoot.getElementById("formAddGame");
         form.style.display = "none";
