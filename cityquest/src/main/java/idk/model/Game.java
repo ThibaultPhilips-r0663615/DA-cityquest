@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static idk.model.Question.QuestionBuilder.aQuestion;
+
 @Entity
 public class Game {
 
@@ -120,6 +122,29 @@ public class Game {
 
         public static GameBuilder aGame (){
             return new GameBuilder();
+        }
+
+        public static GameBuilder aDefaultGame() {
+            return aGame().withName("Leuven Treasure Hunt")
+                    .withLocation("Leuven")
+                    .withCoordinates(4.7005, 50.8798)
+                    .withDescription("Follow the map of questions and find the treasure!")
+                    .withQuestion(aQuestion()
+                            .withCoordinates(4.704496, 50.879154)
+                            .withQuestion("What is the main topic in the M-Museum")
+                            .withAnswer("National History")
+                            .withAnswer("Fashion")
+                            .withAnswer("Modern art")
+                            .withCorrectAnswer(3)
+                            .withExtraInformation("Art museum opened in 2009, architect-designed to unite old buildings with contemporary architecture."))
+                    .withQuestion(aQuestion()
+                            .withCoordinates(4.701235, 50.879127)
+                            .withQuestion("How many statues are on the walls?")
+                            .withAnswer("196")
+                            .withAnswer("236")
+                            .withAnswer("266")
+                            .withCorrectAnswer(2)
+                            .withExtraInformation("15th-century, Gothic-style, former municipal headquarters with spires & 236 sculptures on the walls."));
         }
 
         public Game build(){

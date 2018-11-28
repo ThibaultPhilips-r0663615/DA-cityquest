@@ -1,0 +1,40 @@
+{
+  "id": "${json-unit.ignore}",
+  "name": "Leuven Treasure Hunt",
+  "location": "Leuven",
+  "coordinates": {
+    "lat": 50.8798,
+    "lon": 4.7005
+  },
+  "description": "Follow the map of questions and find the treasure!",
+  "questions": [
+    {
+      "coordinates": {
+        "lat": 50.879154,
+        "lon": 4.704496
+      },
+      "question": "What is the main topic in the M-Museum",
+      "answers": [
+        "National History",
+        "Fashion",
+        "Modern art"
+      ],
+      "correctAnswer": 3,
+      "extraInformation": "Art museum opened in 2009, architect-designed to unite old buildings with contemporary architecture."
+    },
+    {
+      "coordinates": {
+        "lat": 50.879127,
+        "lon": 4.701235
+      },
+      "question": "How many statues are on the walls?",
+      "answers": [
+        "196",
+        "236",
+        "266"
+      ],
+      "correctAnswer": 2,
+      "extraInformation": "15th-century, Gothic-style, former municipal headquarters with spires & 236 sculptures on the walls."
+    }
+  ]
+}

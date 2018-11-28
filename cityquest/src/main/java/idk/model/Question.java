@@ -54,7 +54,7 @@ public class Question {
     }
     
     public static class QuestionBuilder{
-        private String question, extraInfo;
+        private String question, extraInformation;
         private Coordinates coordinates;
         private int correctAnswer;
         private List<String> answer = new ArrayList<>();
@@ -93,8 +93,8 @@ public class Question {
             return this;
         }
 
-        public QuestionBuilder withExtraInfo(String extraInfo) {
-            this.extraInfo = extraInfo;
+        public QuestionBuilder withExtraInformation(String extraInformation) {
+            this.extraInformation = extraInformation;
             return this;
         }
 
@@ -104,7 +104,7 @@ public class Question {
             question.correctAnswer = this.correctAnswer;
             question.coordinates = this.coordinates;
             question.answers = this.answer;
-            question.extraInformation = this.extraInfo;
+            question.extraInformation = this.extraInformation;
             return question;
 
         }

@@ -1,45 +1,68 @@
 package idk.controller;
 
-import idk.Application;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import idk.database.GameRepository;
+import idk.model.Game;
+import org.json.JSONException;
+import org.junit.After;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
+
+import static idk.model.Game.GameBuilder.aDefaultGame;
 import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class GameControllerIT {
+public class GameControllerIT extends AbstractControllerIT {
 
-	@LocalServerPort
-	private int port;
+	@Autowired private GameRepository gameRepository;
 
-	private TestRestTemplate restTemplate = new TestRestTemplate();
-
-	private HttpHeaders headers = new HttpHeaders();
+	@After
+	public void cleanUp(){
+		gameRepository.deleteAll();
+	}
 
 	@Test
-	public void testGetGames_returnsEmpty_whenNoGamesAddedBefore() {
-		HttpEntity<String> entity = new HttpEntity<>(null, headers);
+	public void testRetrieveGames_NoSavedGames_EmptyList() {
+		String actualGames = httpGet("/games");
+		String expectedGames = "[]";
 
-		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/games"),
-				HttpMethod.GET, entity, String.class);
-
-		String expected = "[]";
-
-		assertThatJson(response.getBody()).isEqualTo(expected);
+		assertThatJson(actualGames).isEqualTo(expectedGames);
 	}
 
-	private String createURLWithPort(String uri) {
-		return "http://localhost:" + port + uri;
+	@Test
+	public void testPostGame() throws JSONException {
+		Game game = aDefaultGame().build();
+
+		String actualGameAsJson = httpPost("/games", game);
+		String expectedGameAsJson = jsonTestFile("testGame.json");
+
+		assertThatJson(actualGameAsJson).isEqualTo(expectedGameAsJson);
 	}
 
+	@Test
+	public void testPutGame() throws JSONException, IOException {
+		Game game = aDefaultGame().build();
+
+		String actualGameAsJson = httpPost("/games", game);
+		Game savedGame = new ObjectMapper().readValue(actualGameAsJson, Game.class);
+
+		savedGame.setName("Updated game name");
+		String updatedGameAsJson = httpPut("/games/" + savedGame.getId(), savedGame);
+
+		String expectedGameAsJson = jsonTestFile("testGameUpdatedName.json");
+		assertThatJson(updatedGameAsJson).isEqualTo(expectedGameAsJson);
+	}
+
+	@Test
+	public void testGetGames_WithSavedGame_ListWithSavedGame() throws JSONException {
+		Game game = aDefaultGame().build();
+
+		httpPost("/games", game);
+
+		String actualGames = httpGet("/games");
+		String expectedGames = jsonTestFile("testGameList.json");
+
+		assertThatJson(actualGames).isEqualTo(expectedGames);
+	}
 }

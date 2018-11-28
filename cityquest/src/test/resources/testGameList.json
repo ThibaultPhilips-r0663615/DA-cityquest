@@ -1,0 +1,13 @@
+[
+  {
+    "id": "${json-unit.ignore}",
+    "name": "Leuven Treasure Hunt",
+    "location": "Leuven",
+    "coordinates": {
+      "lat": 50.8798,
+      "lon": 4.7005
+    },
+    "description": "Follow the map of questions and find the treasure!",
+    "questions": []
+  }
+]
