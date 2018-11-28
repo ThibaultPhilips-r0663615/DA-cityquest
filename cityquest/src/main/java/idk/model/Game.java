@@ -103,8 +103,8 @@ public class Game {
             return this;
         }
 
-        public GameBuilder withCoordinates(double longitude, double altitude) {
-            this.coordinates = new Coordinates(longitude, altitude);
+        public GameBuilder withCoordinates(double longitude, double latitude) {
+            this.coordinates = new Coordinates(longitude, latitude);
             return this;
         }
 

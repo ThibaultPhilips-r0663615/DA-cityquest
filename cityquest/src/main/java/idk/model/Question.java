@@ -78,8 +78,8 @@ public class Question {
             return this;
         }
 
-        public QuestionBuilder withCoordinates(double longtidue, double altitude) {
-            this.coordinates = new Coordinates(longtidue, altitude);
+        public QuestionBuilder withCoordinates(double longitude, double latitude) {
+            this.coordinates = new Coordinates(longitude, latitude);
             return this;
         }
 

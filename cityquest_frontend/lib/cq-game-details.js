@@ -30,7 +30,7 @@ class CityQuestGameDetails extends HTMLElement {
         mapDiv.style.width = "60%";
         mapDiv.style.height = "50%";
         mapDiv.style.marginBottom = "3%";
-        this.map = L.map(mapDiv, {center: [game.coordinates.lon, game.coordinates.lat], zoom: 14.4, zoomSnap: 0.1});
+        this.map = L.map(mapDiv, {center: [game.coordinates.lat, game.coordinates.lon], zoom: 14.4, zoomSnap: 0.1});
         L
             .tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
             .addTo(this.map);
@@ -46,7 +46,7 @@ class CityQuestGameDetails extends HTMLElement {
         });
         for(let i = 0; i < game.questions.length; i++){
             L
-                .marker([game.questions[i].coordinates.lon, game.questions[i].coordinates.lat], { icon: myIcon, title: "Question: " + game.questions[i].question })
+                .marker([game.questions[i].coordinates.lat, game.questions[i].coordinates.lon], { icon: myIcon, title: "Question: " + game.questions[i].question })
                 .addTo(this.map);
         }
 
