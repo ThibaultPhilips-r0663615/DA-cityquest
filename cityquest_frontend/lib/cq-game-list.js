@@ -59,60 +59,63 @@ class GameList extends HTMLElement {
         }
     }
     showGameList(json){
-        let ul = this.shadowRoot.querySelector("#gameList");
+        let outerUl = this.shadowRoot.querySelector("#gameList");
         json.forEach(element => {
-            let liName = document.createElement("li");
-            liName.className = "list-group-item";
-            liName.id = (element.id + "Li");
-            liName.style.display = "flex";
-            liName.style.justifyContent = "space-between";
-            let pName = document.createElement("p");
-            pName.innerHTML = element.name;
-            let button = document.createElement("button");
-            button.innerHTML = "Play";
-            button.id = (element.id + "Button");
-            button.type = "button";
-            button.addEventListener("click", function(e){
+            let outerLi = document.createElement("li");
+            outerLi.className = "list-group-item";
+            outerLi.id = (element.id + "Li");
+            outerLi.style.display = "flex";
+            outerLi.style.justifyContent = "space-between";
+            let outerLiGameNameP = document.createElement("p");
+            outerLiGameNameP.innerHTML = element.name;
+            let outerLiGameLocationP = document.createElement("p");
+            outerLiGameLocationP.innerHTML = "[" + element.location + "]";
+            let outerLiPlayButton = document.createElement("button");
+            outerLiPlayButton.innerHTML = "Play";
+            outerLiPlayButton.id = (element.id + "Button");
+            outerLiPlayButton.type = "button";
+            outerLiPlayButton.addEventListener("click", function(e){
                 e.stopPropagation();
                 window.location.href = ("gameDetails.html?id=" + element.id);
             });
-            liName.appendChild(pName);
-            liName.appendChild(button);
-            liName.onclick =() => this.displayDetails(element.id);
-            liName.onmouseover =() => this.changeStyleMouseOver(element.id);
-            liName.onmouseout =() => this.changeStyleMouseOut(element.id);
-            ul.appendChild(liName);
+            outerLi.appendChild(outerLiGameNameP);
+            outerLi.appendChild(outerLiGameLocationP);
+            outerLi.appendChild(outerLiPlayButton);
+            outerLi.onclick =() => this.displayDetails(element.id);
+            outerLi.onmouseover =() => this.changeStyleMouseOver(element.id);
+            outerLi.onmouseout =() => this.changeStyleMouseOut(element.id);
+            outerUl.appendChild(outerLi);
 
             let innerUl = document.createElement("ul");
             innerUl.id = (element.id + "Ul");
             innerUl.style.display = "none";
             innerUl.style.listStyleType = "none";
-            let pLocation = document.createElement("p");
-            pLocation.innerHTML = "Location";
-            let liLocation = document.createElement("li");
-            liLocation.innerHTML = element.location;
-            let pDescription = document.createElement("p");
-            pDescription.innerHTML = "Description";
-            let liDescription = document.createElement("li");
-            liDescription.innerHTML = element.description;
-            let pLongtitude = document.createElement("p");
-            pLongtitude.innerHTML = "Longtitude";
-            let liLongtitude = document.createElement("li");
-            liLongtitude.innerHTML = element.coordinates.lon;
-            let pLatitude = document.createElement("p");
-            pLatitude.innerHTML = "Latitude";
-            let liLatitude = document.createElement("li");
-            liLatitude.innerHTML = element.coordinates.lat;
+            let innerUlGameLocationP = document.createElement("p");
+            innerUlGameLocationP.innerHTML = "Location";
+            let innerUlGameLocationLi = document.createElement("li");
+            innerUlGameLocationLi.innerHTML = element.location;
+            let innerUlGameDescriptionP = document.createElement("p");
+            innerUlGameDescriptionP.innerHTML = "Description";
+            let innerUlGameDescriptionLi = document.createElement("li");
+            innerUlGameDescriptionLi.innerHTML = element.description;
+            let innerUlGameLongtitudeP = document.createElement("p");
+            innerUlGameLongtitudeP.innerHTML = "Longtitude";
+            let innerUlGameLongtitudeLi = document.createElement("li");
+            innerUlGameLongtitudeLi.innerHTML = element.coordinates.lon;
+            let innerUlGameLatitudeP = document.createElement("p");
+            innerUlGameLatitudeP.innerHTML = "Latitude";
+            let innerUlGameLatitudeLi = document.createElement("li");
+            innerUlGameLatitudeLi.innerHTML = element.coordinates.lat;
 
-            innerUl.appendChild(pLocation);
-            innerUl.appendChild(liLocation);
-            innerUl.appendChild(pDescription); 
-            innerUl.appendChild(liDescription);
-            innerUl.appendChild(pLongtitude);
-            innerUl.appendChild(liLongtitude);
-            innerUl.appendChild(pLatitude); 
-            innerUl.appendChild(liLatitude);
-            ul.appendChild(innerUl);
+            innerUl.appendChild(innerUlGameLocationP);
+            innerUl.appendChild(innerUlGameLocationLi);
+            innerUl.appendChild(innerUlGameDescriptionP); 
+            innerUl.appendChild(innerUlGameDescriptionLi);
+            innerUl.appendChild(innerUlGameLongtitudeP);
+            innerUl.appendChild(innerUlGameLongtitudeLi);
+            innerUl.appendChild(innerUlGameLatitudeP); 
+            innerUl.appendChild(innerUlGameLatitudeLi);
+            outerUl.appendChild(innerUl);
         });
     }
     get template() {
