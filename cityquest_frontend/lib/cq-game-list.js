@@ -15,9 +15,51 @@ class GameList extends HTMLElement {
             .then(response => response.json())
             .then(json => this.showGameList(json));
     }
-
-
     
+    showGameList(json){
+        let outerUl = this.shadowRoot.querySelector("#gameList");
+        json.forEach(element => {
+            let outerLi = htmlToElement('<li class="list-group-item" id="' + (element.id + "Li") + '"></li>');
+            outerLi.style.display = "flex";
+            outerLi.style.justifyContent = "space-between";
+            outerLi.onclick =() => this.displayDetails(element.id);
+            outerLi.onmouseover =() => this.changeStyleMouseOver(element.id);
+            outerLi.onmouseout =() => this.changeStyleMouseOut(element.id);
+
+            let outerLiGameNameP = htmlToElement('<p>' + element.name + '</p>');
+            let outerLiGameLocationP = htmlToElement('<p>[' + element.location + ']</p>');
+        
+            let outerLiPlayButton = htmlToElement('<button id="' + (element.id + "Button") + '" type="button">Play</button>');
+            outerLiPlayButton.addEventListener("click", function(e){
+                e.stopPropagation();
+                window.location.href = ("gameDetails.html?id=" + element.id);
+            });
+
+            outerLi.appendChild(outerLiGameNameP);
+            outerLi.appendChild(outerLiGameLocationP);
+            outerLi.appendChild(outerLiPlayButton);
+            outerUl.appendChild(outerLi);
+
+            let innerUl = htmlToElement('<ul id="' + (element.id + "Ul") + '"></ul>');
+            innerUl.style.display = "none";
+            innerUl.style.listStyleType = "none";
+            let innerUlGameLocationP = htmlToElement('<p>Location:</p>');
+            let innerUlGameLocationLi = htmlToElement('<li>' + element.location + '</li>');
+            let innerUlGameDescriptionP = htmlToElement('<p>Description:</p>');
+            let innerUlGameDescriptionLi = htmlToElement('<li>' + element.description + '</li>');
+            let innerUlGameLatitudeP = htmlToElement('<p>Latitude:</p>');
+            let innerUlGameLatitudeLi = htmlToElement('<li>' + element.coordinates.lat + '</li>');
+            let innerUlGameLongtitudeP = htmlToElement('<p>Longitude:</p>');
+            let innerUlGameLongtitudeLi = htmlToElement('<li>' + element.coordinates.lon + '</li>');
+
+            innerUl.appendChild(innerUlGameLocationP); innerUl.appendChild(innerUlGameLocationLi);
+            innerUl.appendChild(innerUlGameDescriptionP); innerUl.appendChild(innerUlGameDescriptionLi);
+            innerUl.appendChild(innerUlGameLatitudeP); innerUl.appendChild(innerUlGameLatitudeLi);
+            innerUl.appendChild(innerUlGameLongtitudeP); innerUl.appendChild(innerUlGameLongtitudeLi);
+            outerUl.appendChild(innerUl);
+        });
+    }
+
     displayDetails(id){
         let innerUl = this.shadowRoot.getElementById((id + "Ul"));
         let outerLi = this.shadowRoot.getElementById((id + "Li"));
@@ -58,66 +100,7 @@ class GameList extends HTMLElement {
             innerButton.style.backgroundColor = "#009688";
         }
     }
-    showGameList(json){
-        let outerUl = this.shadowRoot.querySelector("#gameList");
-        json.forEach(element => {
-            let outerLi = document.createElement("li");
-            outerLi.className = "list-group-item";
-            outerLi.id = (element.id + "Li");
-            outerLi.style.display = "flex";
-            outerLi.style.justifyContent = "space-between";
-            let outerLiGameNameP = document.createElement("p");
-            outerLiGameNameP.innerHTML = element.name;
-            let outerLiGameLocationP = document.createElement("p");
-            outerLiGameLocationP.innerHTML = "[" + element.location + "]";
-            let outerLiPlayButton = document.createElement("button");
-            outerLiPlayButton.innerHTML = "Play";
-            outerLiPlayButton.id = (element.id + "Button");
-            outerLiPlayButton.type = "button";
-            outerLiPlayButton.addEventListener("click", function(e){
-                e.stopPropagation();
-                window.location.href = ("gameDetails.html?id=" + element.id);
-            });
-            outerLi.appendChild(outerLiGameNameP);
-            outerLi.appendChild(outerLiGameLocationP);
-            outerLi.appendChild(outerLiPlayButton);
-            outerLi.onclick =() => this.displayDetails(element.id);
-            outerLi.onmouseover =() => this.changeStyleMouseOver(element.id);
-            outerLi.onmouseout =() => this.changeStyleMouseOut(element.id);
-            outerUl.appendChild(outerLi);
 
-            let innerUl = document.createElement("ul");
-            innerUl.id = (element.id + "Ul");
-            innerUl.style.display = "none";
-            innerUl.style.listStyleType = "none";
-            let innerUlGameLocationP = document.createElement("p");
-            innerUlGameLocationP.innerHTML = "Location";
-            let innerUlGameLocationLi = document.createElement("li");
-            innerUlGameLocationLi.innerHTML = element.location;
-            let innerUlGameDescriptionP = document.createElement("p");
-            innerUlGameDescriptionP.innerHTML = "Description";
-            let innerUlGameDescriptionLi = document.createElement("li");
-            innerUlGameDescriptionLi.innerHTML = element.description;
-            let innerUlGameLongtitudeP = document.createElement("p");
-            innerUlGameLongtitudeP.innerHTML = "Longtitude";
-            let innerUlGameLongtitudeLi = document.createElement("li");
-            innerUlGameLongtitudeLi.innerHTML = element.coordinates.lon;
-            let innerUlGameLatitudeP = document.createElement("p");
-            innerUlGameLatitudeP.innerHTML = "Latitude";
-            let innerUlGameLatitudeLi = document.createElement("li");
-            innerUlGameLatitudeLi.innerHTML = element.coordinates.lat;
-
-            innerUl.appendChild(innerUlGameLocationP);
-            innerUl.appendChild(innerUlGameLocationLi);
-            innerUl.appendChild(innerUlGameDescriptionP); 
-            innerUl.appendChild(innerUlGameDescriptionLi);
-            innerUl.appendChild(innerUlGameLongtitudeP);
-            innerUl.appendChild(innerUlGameLongtitudeLi);
-            innerUl.appendChild(innerUlGameLatitudeP); 
-            innerUl.appendChild(innerUlGameLatitudeLi);
-            outerUl.appendChild(innerUl);
-        });
-    }
     get template() {
         return `
             <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>

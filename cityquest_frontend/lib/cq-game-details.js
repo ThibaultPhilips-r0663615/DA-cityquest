@@ -20,15 +20,12 @@ class CityQuestGameDetails extends HTMLElement {
             .then(response => response.json())
             .then(json => this.showGame(json));
     }
+
     showGame(game) {
         this.game = game;
         this.showGameDetails(game);
         
         let mapDiv = document.getElementById('map');
-        mapDiv.style.display = 'block';
-        mapDiv.style.width = "60%";
-        mapDiv.style.height = "50%";
-        mapDiv.style.marginBottom = "3%";
         this.map = L.map(mapDiv, {center: [game.coordinates.lat, game.coordinates.lon], zoom: 14.4, zoomSnap: 0.1});
         L
             .tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
@@ -67,80 +64,69 @@ class CityQuestGameDetails extends HTMLElement {
 
         this.game.questions.forEach(element => {
             let distance = this.getDistInMeter(element.coordinates, coords);
-
-            let alreadyAsked = false;
-            for(let i = 0; i < questionAlreadyDone.length; i++){
-                if(questionAlreadyDone[i] == element){
-                    alreadyAsked = true;
+            //Edit to 50, left at high number for testing purpose.
+            if(distance < 20000){
+                let alreadyAsked = false;
+                for(let i = 0; i < questionAlreadyDone.length; i++){
+                    if(questionAlreadyDone[i] == element){
+                        alreadyAsked = true;
+                    }
                 }
+                if(alreadyAsked == false){
+                    this.shadowRoot.getElementById("QuestionTitle").innerHTML = element.question;
+                    this.shadowRoot.getElementById("QuestionLatitude").innerHTML = element.coordinates.lat;
+                    this.shadowRoot.getElementById("QuestionLongitude").innerHTML = element.coordinates.lon;
+                    let answersDiv = this.shadowRoot.getElementById("QuestionPossibleAnswers");
+                    let correctAnswerSelect = this.shadowRoot.getElementById("QuestionAnswer");
+                    let count = 1;
+                    answersDiv.innerHTML = "";
+                    element.answers.forEach(element => {
+                        let answer = document.createElement("p");
+                        answer.innerHTML = element;
+                        answersDiv.appendChild(answer);
+                        let option = document.createElement("option");
+                        option.innerHTML = count;
+                        correctAnswerSelect.appendChild(option);
+                        count++;
+                    });
+                    let sendButton = this.shadowRoot.getElementById("SendAnswer");
+                    sendButton.onclick =() => this.sendAnswer();
+                    $(this.shadowRoot.getElementById("QuestionModal")).modal('show');
+                    questionAlreadyDone[questionAlreadyDone.length] = element;
+                }
+                alreadyAsked = false;
             }
-            if(alreadyAsked == false){
-                this.shadowRoot.getElementById("QuestionTitle").innerHTML = element.question;
-                this.shadowRoot.getElementById("QuestionLatitude").innerHTML = element.coordinates.lat;
-                this.shadowRoot.getElementById("QuestionLongitude").innerHTML = element.coordinates.lon;
-                let answersDiv = this.shadowRoot.getElementById("QuestionPossibleAnswers");
-                let correctAnswerSelect = this.shadowRoot.getElementById("QuestionAnswer");
-                let count = 1;
-                answersDiv.innerHTML = "";
-                element.answers.forEach(element => {
-                    let answer = document.createElement("p");
-                    answer.innerHTML = element;
-                    answersDiv.appendChild(answer);
-                    let option = document.createElement("option");
-                    option.innerHTML = count;
-                    correctAnswerSelect.appendChild(option);
-                    count++;
-                });
-                let modalFooter = this.shadowRoot.getElementById("modal-footer");
-                let sendButton = document.createElement("button");
-                sendButton.type = "button";
-                sendButton.className = "btn btn-primary";
-                sendButton.innerHTML = "Send answer";
-                sendButton.onclick =() => this.sendAnswer();
-                modalFooter.appendChild(sendButton);
-                $(this.shadowRoot.getElementById("QuestionModal")).modal('show');
-                questionAlreadyDone[questionAlreadyDone.length] = element;
-            }
-            alreadyAsked = false;
         });
     }
-
+    sendAnswer(){
+        let selectedAnswer = document.getElementById("QuestionAnswer");
+        alert(selectedAnswer.options[selectedAnswer.selectedIndex].text);
+    }
     showGameDetails(game){
         let div = this.shadowRoot.getElementById("game");
 
-        let gameNameDescription = document.createElement("p");
-        gameNameDescription.className = "game-detail-label";
-        gameNameDescription.innerHTML = "Name: ";
-        let gameNameP = document.createElement("p");
-        gameNameP.innerHTML = game.name;
+        let gameNameDescription = htmlToElement('<p class="game-detail-label">Name: </p>');
+        let gameNameP = htmlToElement('<p>' + game.name + '</p>');
 
-        let gameDescriptionDescription = document.createElement("p");
-        gameDescriptionDescription.className = "game-detail-label";
-        gameDescriptionDescription.innerHTML = "Description: ";
-        let gameDescriptionP = document.createElement("p");
-        gameDescriptionP.innerHTML = game.description;
+        let gameDescriptionDescription = htmlToElement('<p class="game-detail-label">Description: </p>');
+        let gameDescriptionP = htmlToElement('<p>' + game.description + '</p>');
 
-        let gameLocationDescription = document.createElement("p");
-        gameLocationDescription.className = "game-detail-label";
-        gameLocationDescription.innerHTML = "Location: ";
-        let gameLocationP = document.createElement("p");
-        gameLocationP.innerHTML = game.location;
+        let gameLocationDescription = htmlToElement('<p class="game-detail-label">Location: </p>');
+        let gameLocationP = htmlToElement('<p>' + game.location + '</p>');
 
-        let gameLongitudeDescription = document.createElement("p");
-        gameLongitudeDescription.className = "game-detail-label";
-        gameLongitudeDescription.innerHTML = "Longitude: ";
-        let gameLongitudeP = document.createElement("span");
-        gameLongitudeP.innerHTML = game.coordinates.lon;
+        let gameLatitudeDescription = htmlToElement('<p class="game-detail-label">Latitude: </p>');
+        let gameLatitudeP = htmlToElement('<p>' + game.coordinates.lat + '</p>');
 
-        let gameLatitudeDescription = document.createElement("p");
-        gameLatitudeDescription.className = "game-detail-label";
-        gameLatitudeDescription.innerHTML = "Latitude: ";
-        let gameLatitudeP = document.createElement("span");
-        gameLatitudeP.innerHTML = game.coordinates.lat;
+        let gameLongitudeDescription = htmlToElement('<p class="game-detail-label">Longitude: </p>');
+        let gameLongitudeP = htmlToElement('<p>' + game.coordinates.lon + '</p>');
 
-        div.appendChild(gameNameDescription); div.appendChild(gameNameP); div.appendChild(gameLocationDescription); div.appendChild(gameLocationP); div.appendChild(gameDescriptionDescription); div.appendChild(gameDescriptionP); 
-        div.appendChild(gameLongitudeDescription); div.appendChild(gameLongitudeP); div.appendChild(gameLatitudeDescription); div.appendChild(gameLatitudeP);
+        div.appendChild(gameNameDescription); div.appendChild(gameNameP);
+        div.appendChild(gameDescriptionDescription); div.appendChild(gameDescriptionP); 
+        div.appendChild(gameLocationDescription); div.appendChild(gameLocationP);
+        div.appendChild(gameLatitudeDescription); div.appendChild(gameLatitudeP);
+        div.appendChild(gameLongitudeDescription); div.appendChild(gameLongitudeP); 
     }
+
 
     getDistInMeter(coordinates1, coordinates2){
         let R = 6371;
@@ -155,7 +141,6 @@ class CityQuestGameDetails extends HTMLElement {
 
         return (R * c * 1000);
     }
-
     get template() {
         return `
             <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>
@@ -171,8 +156,8 @@ class CityQuestGameDetails extends HTMLElement {
                     height: 4%;
                 }
                 .game-detail-label {
-                    margin-top: 1%;
-                    font-weight: bold;
+                    margin-bottom: 0%;
+                    margin-top: 2%;
                     text-decoration: underline;
                     text-decoration-color: #009688;
                 }
@@ -205,8 +190,9 @@ class CityQuestGameDetails extends HTMLElement {
                         <select multiple class="form-control" id="QuestionAnswer">
                         </select>
                     </div>
-                    <div class="modal-footer" id="modal-footer">
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="SendAnswer" data-dismiss="modal" class="btn btn-primary">Send answer</button>
                     </div>
                     </div>
                 </div>

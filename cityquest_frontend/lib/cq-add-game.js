@@ -14,12 +14,11 @@ class CityQuestAddGame extends HTMLElement {
     initShadowDom() {
         let shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.innerHTML = this.template;
-        this.startUpStylingAndAddFunctionality();
+        this.setUp();
     }
 
 
-
-    startUpStylingAndAddFunctionality(){
+    setUp(){
         let submitGame = this.shadowRoot.getElementById("submitGame");
         submitGame.onclick =() => this.submitGame();
 
@@ -30,7 +29,7 @@ class CityQuestAddGame extends HTMLElement {
         questionForm.style.display = "none";
         
         let addQuestionButton = this.shadowRoot.getElementById("addQuestionButton");
-        addQuestionButton.onclick =() => this.showQuestionForm(questionForm.id);
+        addQuestionButton.onclick =() => this.showForm(questionForm.id);
 
         let verifyQuestionButton = this.shadowRoot.getElementById("verifyQuestionButton");
         verifyQuestionButton.onclick =() => {
@@ -44,7 +43,7 @@ class CityQuestAddGame extends HTMLElement {
         answerForm.style.display = "none";
 
         let addAnswerButton = this.shadowRoot.getElementById("addAnswerButton");
-        addAnswerButton.onclick =() => this.showAnswerForm(answerForm.id);
+        addAnswerButton.onclick =() => this.showForm(answerForm.id);
 
         let verifyAnswerButton = this.shadowRoot.getElementById("verifyAnswerButton");
         verifyAnswerButton.onclick =() => this.addAnswersToList();
@@ -53,6 +52,54 @@ class CityQuestAddGame extends HTMLElement {
         addAnotherGameButton.style.display = "none";
         let gameAdded = this.shadowRoot.getElementById("gameAdded");
         gameAdded.style.display = "none";
+    }
+    showForm(id){
+        let form = this.shadowRoot.getElementById(id);
+        if(form.style.display == "none"){
+            form.style.display = "block";
+        }
+        else{
+            form.style.display = "none";
+        }
+    }
+    addQuestionToList(){
+        let question = this.shadowRoot.getElementById("inputQuestion");
+        let extraInformation = this.shadowRoot.getElementById("inputExtraInformation");
+        let longtitudeQuestion = this.shadowRoot.getElementById("inputLongtitudeQuestion");
+        let latitudeQuestion = this.shadowRoot.getElementById("inpuLatitudeQuestion");
+        let correctAnswer = this.shadowRoot.getElementById("inputCorrectAnswer");
+
+        var questionObject = new Question(question.value, extraInformation.value, new Coordinates(longtitudeQuestion.value, latitudeQuestion.value), (correctAnswer.value - 1), answers);
+
+        question.value = "";
+        extraInformation.value = "";
+        longtitudeQuestion.value = "";
+        latitudeQuestion.value = "";
+        correctAnswer.value = "";
+        
+        questions[index] = questionObject;
+        index++;
+        let numberOfQuestions = this.shadowRoot.getElementById("numberOfQuestions");
+        numberOfQuestions.innerHTML = (index) + " questions in the game.";
+        let questionForm = this.shadowRoot.getElementById("questionForm");
+        questionForm.style.display = "none";
+
+        indexAnswers = 0;
+        answers = new Array();
+        let numberOfAnswers = this.shadowRoot.getElementById("numberOfAnswers");
+        numberOfAnswers.innerHTML = (indexAnswers) + " answers in the question.";
+        let answerForm = this.shadowRoot.getElementById("answerForm");
+        answerForm.style.display = "none";
+        
+    }
+    addAnswersToList(){
+        let answer = this.shadowRoot.getElementById("inputAnswer");
+
+        answers[indexAnswers] = answer.value;
+        indexAnswers++;
+        answer.value = "";
+        let numberOfAnswers = this.shadowRoot.getElementById("numberOfAnswers");
+        numberOfAnswers.innerHTML = (indexAnswers) + " answers in the question.";
     }
     submitGame(){
         let inputName = this.shadowRoot.getElementById("inputName");
@@ -88,63 +135,6 @@ class CityQuestAddGame extends HTMLElement {
         let gameAdded = this.shadowRoot.getElementById("gameAdded");
         gameAdded.style.display = "block";
     }
-    showQuestionForm(id){
-        let questionForm = this.shadowRoot.getElementById(id);
-        if(questionForm.style.display == "none"){
-            questionForm.style.display = "block";
-        }
-        else{
-            questionForm.style.display = "none";
-        }
-    }
-    showAnswerForm(id){
-        let answerForm = this.shadowRoot.getElementById(id);
-        if(answerForm.style.display == "none"){
-            answerForm.style.display = "block";
-        }
-        else{
-            answerForm.style.display = "none";
-        }
-    }
-    addQuestionToList(){
-        let question = this.shadowRoot.getElementById("inputQuestion");
-        let extraInformation = this.shadowRoot.getElementById("inputExtraInformation");
-        let longtitudeQuestion = this.shadowRoot.getElementById("inputLongtitudeQuestion");
-        let latitudeQuestion = this.shadowRoot.getElementById("inpuLatitudeQuestion");
-        let correctAnswer = this.shadowRoot.getElementById("inputCorrectAnswer");
-
-        var questionObject = new Question(question.value, extraInformation.value, new Coordinates(longtitudeQuestion.value, latitudeQuestion.value), correctAnswer.value, answers);
-
-        question.value = "";
-        extraInformation.value = "";
-        longtitudeQuestion.value = "";
-        latitudeQuestion.value = "";
-        correctAnswer.value = "";
-        
-        questions[index] = questionObject;
-        index++;
-        let numberOfQuestions = this.shadowRoot.getElementById("numberOfQuestions");
-        numberOfQuestions.innerHTML = (index) + " questions in the game.";
-        let questionForm = this.shadowRoot.getElementById("questionForm");
-        questionForm.style.display = "none";
-
-        indexAnswers = 0;
-        answers = new Array();
-        let numberOfAnswers = this.shadowRoot.getElementById("numberOfAnswers");
-        numberOfAnswers.innerHTML = (indexAnswers) + " answers in the question.";
-        let answerForm = this.shadowRoot.getElementById("answerForm");
-        answerForm.style.display = "none";
-        
-    }
-    addAnswersToList(){
-        let answer = this.shadowRoot.getElementById("inputAnswer");
-
-        answers[indexAnswers] = answer.value;
-        indexAnswers++;
-        answer.value = "";
-        let numberOfAnswers = this.shadowRoot.getElementById("numberOfAnswers");
-        numberOfAnswers.innerHTML = (indexAnswers) + " answers in the question.";
-    }
     get template() {
         return `
             <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>
@@ -173,14 +163,14 @@ class CityQuestAddGame extends HTMLElement {
                     <textarea class="form-control" id="inputDescription" placeholder="Enter a description" name="inputDescription" rows="10" cols="40"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="inputLongtitude">Longtitude</label>
-                    <input type="text" class="form-control" id="inputLongtitude" placeholder="Enter a longtitude" aria-describedby="longtitudeHelp">
-                    <small id="longtitudeHelp" class="form-text text-muted">Find the longtitude. (e.g. via google maps)</small>
-                </div>
-                <div class="form-group">
                     <label for="inputLatitude">Latitude</label>
                     <input type="text" class="form-control" id="inputLatitude" placeholder="Enter a latitude" aria-describedby="latitudeHelp">
                     <small id="latitudeHelp" class="form-text text-muted">Find the latitude. (e.g. via google maps)</small>
+                </div>
+                <div class="form-group">
+                    <label for="inputLongtitude">Longtitude</label>
+                    <input type="text" class="form-control" id="inputLongtitude" placeholder="Enter a longtitude" aria-describedby="longtitudeHelp">
+                    <small id="longtitudeHelp" class="form-text text-muted">Find the longtitude. (e.g. via google maps)</small>
                 </div>
                 <div>
                     <label>Add questions: </label><br>
@@ -196,14 +186,14 @@ class CityQuestAddGame extends HTMLElement {
                         <textarea class="form-control" id="inputExtraInformation" placeholder="Give some extra information" rows="10" cols="40"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="inputLongtitudeQuestion">Longtitude </label>
-                        <input type="text" class="form-control" id="inputLongtitudeQuestion" name="inputLongtitudeQuestion" placeholder="Enter a longtitude" aria-describedby="longtitudeHelpQuestion">
-                        <small id="longtitudeHelpQuestion" class="form-text text-muted">Find the longtitude. (e.g. via google maps)</small>
-                    </div>
-                    <div class="form-group">
                         <label for="inpuLatitudeQuestion">Latitude</label>
                         <input type="text" class="form-control" id="inpuLatitudeQuestion" name="inpuLatitudeQuestion" placeholder="Enter a latitude" aria-describedby="latitudeHelpQueston">
                         <small id="latitudeHelpQuestion" class="form-text text-muted">Find the latitude. (e.g. via google maps)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputLongtitudeQuestion">Longtitude </label>
+                        <input type="text" class="form-control" id="inputLongtitudeQuestion" name="inputLongtitudeQuestion" placeholder="Enter a longtitude" aria-describedby="longtitudeHelpQuestion">
+                        <small id="longtitudeHelpQuestion" class="form-text text-muted">Find the longtitude. (e.g. via google maps)</small>
                     </div>
                     
                     <div>
@@ -220,8 +210,8 @@ class CityQuestAddGame extends HTMLElement {
                     <div class="alert alert-warning" role="alert" id="numberOfAnswers"></div>
                     <div class="form-group">
                         <label for="inputCorrectAnswer">Correct answer</label>
-                        <input type="number" class="form-control" id="inputCorrectAnswer" name="inputCorrectAnswer" placeholder="Enter a number" aria-describedby="correctAnswerHelpQueston">
-                        <small id="correctAnswerHelpQueston" class="form-text text-muted">Enter the index of the correct answer (starting from 0).</small>
+                        <input type="number" class="form-control" id="inputCorrectAnswer" name="inputCorrectAnswer" placeholder="Enter a number" min="1" aria-describedby="correctAnswerHelpQueston">
+                        <small id="correctAnswerHelpQueston" class="form-text text-muted">Enter the index of the correct answer (starting from 1).</small>
                     </div>
                     <button type="button" class="btn btn-primary" id="verifyQuestionButton">Verify question</button>
                 </div>
