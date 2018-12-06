@@ -3,20 +3,28 @@ package idk.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.UUID;
 
+import static java.time.temporal.ChronoUnit.SECONDS;
+
 @Entity
-public class GameScore {
+public class Score {
+
     @Id
     @GeneratedValue
     private UUID id;
     private UUID gameId;
-    private LocalTime startTime, endTime;
-    private float score;
+    private LocalDateTime startTime, endTime;
+    private int score;
 
-    public GameScore() {
-        
+    public Score() {
+    }
+    
+    public long getDurationInSeconds(){
+        return startTime.until(endTime, SECONDS);
     }
 
     public void setGameId(UUID gameId) {
@@ -27,15 +35,15 @@ public class GameScore {
         this.id = id;
     }
 
-    public void setStartTime(LocalTime startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
-    public void setScore(float score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
@@ -47,23 +55,22 @@ public class GameScore {
         return id;
     }
 
-    public LocalTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public LocalTime getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public float getScore() {
+    public int getScore() {
         return score;
     }
     
     public static class GameScoreBuilder {
-        private UUID id;
         private UUID gameId;
-        private LocalTime startTime, endTime;
-        private float score;
+        private LocalDateTime startTime, endTime;
+        private int score;
 
         public GameScoreBuilder() {
             
@@ -74,22 +81,17 @@ public class GameScore {
             return this;
         }
 
-        public GameScoreBuilder withId(UUID id) {
-            this.id = id;
-            return this;
-        }
-
-        public GameScoreBuilder withStartTime(LocalTime startTime) {
+        public GameScoreBuilder withStartTime(LocalDateTime startTime) {
             this.startTime = startTime;
             return this;
         }
 
-        public GameScoreBuilder withEndTime(LocalTime endTime) {
+        public GameScoreBuilder withEndTime(LocalDateTime endTime) {
             this.endTime = endTime;
             return this;
         }
 
-        public GameScoreBuilder withScore(float score) {
+        public GameScoreBuilder withScore(int score) {
             this.score = score;
             return this;
         }
@@ -98,13 +100,12 @@ public class GameScore {
             return new GameScoreBuilder();
         }
 
-        public GameScore build(){
-            GameScore gameScore = new GameScore();
-            gameScore.id = this.id;
-            gameScore.startTime = this.startTime;
-            gameScore.endTime = this.endTime;
-            gameScore.score = this.score;
-            return gameScore;
+        public Score build(){
+            Score score = new Score();
+            score.startTime = this.startTime;
+            score.endTime = this.endTime;
+            score.score = this.score;
+            return score;
         }
     }
 }

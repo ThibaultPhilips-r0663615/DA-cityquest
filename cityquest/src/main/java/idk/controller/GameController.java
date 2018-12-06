@@ -38,12 +38,13 @@ public class GameController {
         return gameRepository.save(game);
     }
 
-    @RequestMapping(path = "/near", method = RequestMethod.GET)
-    public List<Game> getGamesOrdered(@RequestParam("lon") double lon, @RequestParam("lat") double lat){
+    @RequestMapping(path = "/nearest", method = RequestMethod.GET)
+    public List<Game> getGamesNearest(@RequestParam("lon") double lon, @RequestParam("lat") double lat){
         return StreamSupport
                 .stream(gameRepository.findAll().spliterator(), false)
                 .peek(game -> game.setQuestions(new ArrayList<>()))
                 .sorted(new GeoDistComparator(new Coordinates(lon, lat)))
+                .limit(10)
                 .collect(Collectors.toList());
     }
 
@@ -58,7 +59,7 @@ public class GameController {
         return gameRepository.save(game);
     }
 
-    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "game not found")
+    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Game not found")
     private class GameNotFoundException extends RuntimeException {
     }
 
