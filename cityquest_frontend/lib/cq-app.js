@@ -1,6 +1,7 @@
-class CityQuestApp extends HTMLElement {
+import AbstractCQElement from './cq-element.js';
 
-    connectedCallback() {
+class CityQuestApp extends AbstractCQElement {
+    connectedCallback() {   
         this.initShadowDom();
     }
 
@@ -11,17 +12,11 @@ class CityQuestApp extends HTMLElement {
 
     get template() {
         return `
-            <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>
-            <style>
-                #navBar {
-                    display: flex;
-                    width: 20%;
-                    margin-top: 2%;
-                    margin-bottom: 2%;
-                }
-            </style>
             <h1>City Quest</h1>
-            <div id="navBar"><button onclick="window.location.href='index.html'" class="btn btn-primary">Home</button><button onclick="window.location.href='addGameForm.html'" class="btn btn-primary">Add game</buton></div>
+            <div id="navBar">
+                <a href='index.html' class="btn btn-primary">Home</a>
+                <a href='addGameForm.html' class="btn btn-primary">Add game</a>
+            </div>
         `;
     }
 }

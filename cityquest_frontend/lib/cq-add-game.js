@@ -1,4 +1,4 @@
-import { Game, Question, Coordinates } from "../model/modelClass.js";
+import { Game, Question, Coordinates } from "./model/modelClass.js";
 
 var questions = new Array();
 var answers = new Array();

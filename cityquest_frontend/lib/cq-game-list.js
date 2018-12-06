@@ -1,3 +1,5 @@
+import { htmlToElement } from './util/util.js';
+
 class GameList extends HTMLElement {
     
     connectedCallback() {
