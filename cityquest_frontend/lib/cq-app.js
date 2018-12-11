@@ -23,6 +23,7 @@ class CityQuestApp extends AbstractCQElement {
 
     get template() {
         return `
+            <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>
             <h1>City Quest</h1>
             <div id="navBar"><button id="homeNav" class="btn btn-primary">Home</button><button id="newGameNav" class="btn btn-primary">Add game</buton></div>
         `;

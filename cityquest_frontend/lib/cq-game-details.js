@@ -1,20 +1,12 @@
-import { htmlToElement } from './util/util.js';
+import AbstractCQElement from './cq-element.js';
+import './cq-show-question.js';
 
 var questionAlreadyDone = new Array();
 
-class CityQuestGameDetails extends HTMLElement {
+class CityQuestGameDetails extends AbstractCQElement {
 
-    connectedCallback() {
-        this.initShadowDom();
-
-        let url = new URL(window.location.href);
-        let id = url.searchParams.get("id");
-        this.fetchGame(id);
-    }
-
-    initShadowDom() {
-        let shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.innerHTML = this.template;
+    init(params){
+        this.fetchGame(params.id);
     }
 
     fetchGame(id){   
@@ -24,8 +16,13 @@ class CityQuestGameDetails extends HTMLElement {
     }
 
     showGame(game) {
+        this.shadowRoot.getElementById("gameName").innerHTML = game.name;
+        this.shadowRoot.getElementById("gameDescription").innerHTML = game.description;
+        this.shadowRoot.getElementById("gameLocation").innerHTML = game.location;
+        this.shadowRoot.getElementById("gameLatitude").innerHTML = game.coordinates.lat;
+        this.shadowRoot.getElementById("gameLongitude").innerHTML = game.coordinates.lon;
+
         this.game = game;
-        this.showGameDetails(game);
         
         let mapDiv = document.getElementById('map');
         this.map = L.map(mapDiv, {center: [game.coordinates.lat, game.coordinates.lon], zoom: 14.4, zoomSnap: 0.1});
@@ -64,71 +61,35 @@ class CityQuestGameDetails extends HTMLElement {
                 .addTo(this.map);
         }
 
+        let alreadyAsked = false;
         this.game.questions.forEach(element => {
             let distance = this.getDistInMeter(element.coordinates, coords);
             //Edit to 50, left at high number for testing purpose.
             if(distance < 20000){
-                let alreadyAsked = false;
                 for(let i = 0; i < questionAlreadyDone.length; i++){
                     if(questionAlreadyDone[i] == element){
                         alreadyAsked = true;
                     }
                 }
                 if(alreadyAsked == false){
-                    this.shadowRoot.getElementById("QuestionTitle").innerHTML = element.question;
-                    this.shadowRoot.getElementById("QuestionLatitude").innerHTML = element.coordinates.lat;
-                    this.shadowRoot.getElementById("QuestionLongitude").innerHTML = element.coordinates.lon;
-                    let answersDiv = this.shadowRoot.getElementById("QuestionPossibleAnswers");
-                    let correctAnswerSelect = this.shadowRoot.getElementById("QuestionAnswer");
-                    let count = 1;
-                    answersDiv.innerHTML = "";
-                    element.answers.forEach(element => {
-                        let answer = document.createElement("p");
-                        answer.innerHTML = element;
-                        answersDiv.appendChild(answer);
-                        let option = document.createElement("option");
-                        option.innerHTML = count;
-                        correctAnswerSelect.appendChild(option);
-                        count++;
-                    });
-                    let sendButton = this.shadowRoot.getElementById("SendAnswer");
-                    sendButton.onclick =() => this.sendAnswer();
-                    $(this.shadowRoot.getElementById("QuestionModal")).modal('show');
+                    let showQuestion = document.createElement("cq-show-question"); 
+                    this.shadowRoot.getElementById("questionPlaceHolder").appendChild(showQuestion);
+                    showQuestion.init(element);
                     questionAlreadyDone[questionAlreadyDone.length] = element;
                 }
                 alreadyAsked = false;
             }
         });
     }
-    sendAnswer(){
-        let selectedAnswer = document.getElementById("QuestionAnswer");
-        alert(selectedAnswer.options[selectedAnswer.selectedIndex].text);
-    }
-    showGameDetails(game){
-        let div = this.shadowRoot.getElementById("game");
-
-        let gameNameDescription = htmlToElement('<p class="game-detail-label">Name: </p>');
-        let gameNameP = htmlToElement('<p>' + game.name + '</p>');
-
-        let gameDescriptionDescription = htmlToElement('<p class="game-detail-label">Description: </p>');
-        let gameDescriptionP = htmlToElement('<p>' + game.description + '</p>');
-
-        let gameLocationDescription = htmlToElement('<p class="game-detail-label">Location: </p>');
-        let gameLocationP = htmlToElement('<p>' + game.location + '</p>');
-
-        let gameLatitudeDescription = htmlToElement('<p class="game-detail-label">Latitude: </p>');
-        let gameLatitudeP = htmlToElement('<p>' + game.coordinates.lat + '</p>');
-
-        let gameLongitudeDescription = htmlToElement('<p class="game-detail-label">Longitude: </p>');
-        let gameLongitudeP = htmlToElement('<p>' + game.coordinates.lon + '</p>');
-
-        div.appendChild(gameNameDescription); div.appendChild(gameNameP);
-        div.appendChild(gameDescriptionDescription); div.appendChild(gameDescriptionP); 
-        div.appendChild(gameLocationDescription); div.appendChild(gameLocationP);
-        div.appendChild(gameLatitudeDescription); div.appendChild(gameLatitudeP);
-        div.appendChild(gameLongitudeDescription); div.appendChild(gameLongitudeP); 
+    showAnswer(result){
+        alert(result);
     }
 
+    destroy() {
+        this.mapDiv.style.display = 'none';
+        this.map.remove();
+        navigator.geolocation.watchPosition
+    }
 
     getDistInMeter(coordinates1, coordinates2){
         let R = 6371;
@@ -165,39 +126,24 @@ class CityQuestGameDetails extends HTMLElement {
                 }
             </style>
             <h3>Game details</h3>
-            <div id="game"></div>
+            <div id="game">
+                <p class="game-detail-label">Name: </p>
+                <p id="gameName"></p>
+                <p class="game-detail-label">Description: </p>
+                <p id="gameDescription"></p>
+                <p class="game-detail-label">Location: </p>
+                <p id="gameLocation"></p>
+                <p class="game-detail-label">Latitude: </p>
+                <p id="gameLatitude"></p>
+                <p class="game-detail-label">Longitude: </p>
+                <p id="gameLongitude"></p>
+            </div>
             <div id="information">
                 <div><img src="./images/marker_red.png"><p> Your location!</p></div>
                 <div><img src="./images/marker_black.png"><p> The location of the question!</p></div>
             </div>
 
-            <div id="QuestionModal" class="modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="QuestionTitle"></h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p class="question-detail-label">Latitude of the question: </p>
-                        <p id="QuestionLatitude"></p> 
-                        <p class="question-detail-label">Longitude of the question: </p>
-                        <p id="QuestionLongitude"></p>
-                        <p class="question-detail-label">All the possible answers: </p>
-                        <div id="QuestionPossibleAnswers">
-                        </div>
-                        <p class="question-detail-label">Select the correct answer.</p>
-                        <select multiple class="form-control" id="QuestionAnswer">
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="SendAnswer" data-dismiss="modal" class="btn btn-primary">Send answer</button>
-                    </div>
-                    </div>
-                </div>
+            <div id="questionPlaceHolder">
             </div>
         `;
     }

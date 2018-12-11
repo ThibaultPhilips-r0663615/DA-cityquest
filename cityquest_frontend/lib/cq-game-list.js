@@ -27,10 +27,7 @@ class GameList extends AbstractCQElement {
             let outerLiGameLocationP = htmlToElement('<p>[' + element.location + ']</p>');
         
             let outerLiPlayButton = htmlToElement('<button id="' + (element.id + "Button") + '" type="button">Play</button>');
-            outerLiPlayButton.addEventListener("click", function(e){
-                e.stopPropagation();
-                window.location.href = ("gameDetails.html?id=" + element.id);
-            });
+            outerLiPlayButton.addEventListener("click", () => this.app.router.navigate('/games/' + element.id));
 
             outerLi.appendChild(outerLiGameNameP);
             outerLi.appendChild(outerLiGameLocationP);

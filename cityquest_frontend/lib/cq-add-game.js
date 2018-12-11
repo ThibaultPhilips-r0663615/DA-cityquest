@@ -1,4 +1,4 @@
-import { Game, Question, Coordinates } from "../model/modelClass.js";
+import { Game, Question, Coordinates } from "./model/modelClass.js";
 import AbstractCQElement from './cq-element.js';
 import './cq-question-editor.js';
 
