@@ -1,3 +1,5 @@
+import { htmlToElement } from './util/util.js';
+
 var questionAlreadyDone = new Array();
 
 class CityQuestGameDetails extends HTMLElement {
@@ -32,7 +34,7 @@ class CityQuestGameDetails extends HTMLElement {
             .addTo(this.map);
         
         var myIcon = L.icon({
-            iconUrl: './marker_black.png',
+            iconUrl: './images/marker_black.png',
             iconSize: [40, 45],
             iconAnchor: [20, 45]
         });
@@ -50,7 +52,7 @@ class CityQuestGameDetails extends HTMLElement {
     }
     showOnMap(coords) {
         var myIcon2 = L.icon({
-            iconUrl: './marker_red.png',
+            iconUrl: './images/marker_red.png',
             iconSize: [40, 45],
             iconAnchor: [20, 45]
         });
@@ -165,8 +167,8 @@ class CityQuestGameDetails extends HTMLElement {
             <h3>Game details</h3>
             <div id="game"></div>
             <div id="information">
-                <div><img src="marker_red.png"><p> Your location!</p></div>
-                <div><img src="marker_black.png"><p> The location of the question!</p></div>
+                <div><img src="./images/marker_red.png"><p> Your location!</p></div>
+                <div><img src="./images/marker_black.png"><p> The location of the question!</p></div>
             </div>
 
             <div id="QuestionModal" class="modal" tabindex="-1" role="dialog">

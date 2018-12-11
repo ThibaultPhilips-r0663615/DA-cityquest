@@ -7,6 +7,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.google.cloud.tools.jib' version '0.10.0'
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -28,9 +32,17 @@ targetCompatibility = 1.8
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('mysql:mysql-connector-java:8.0.13')
     compile('com.h2database:h2')
     testCompile('junit:junit')
     testCompile('org.assertj:assertj-core:3.11.1')
     testCompile('net.javacrumbs.json-unit:json-unit-fluent:2.1.1')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+jib {
+    to {
+        image = "city-quest-app:0.0.1-SNAPSHOT"
+    }
+    allowInsecureRegistries = true
 }
