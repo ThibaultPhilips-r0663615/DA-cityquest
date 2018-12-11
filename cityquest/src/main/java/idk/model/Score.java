@@ -4,8 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalUnit;
 import java.util.UUID;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
@@ -18,7 +16,7 @@ public class Score {
     private UUID id;
     private UUID gameId;
     private LocalDateTime startTime, endTime;
-    private int score;
+    private int answersCorrect;
 
     public Score() {
     }
@@ -43,8 +41,8 @@ public class Score {
         this.endTime = endTime;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setAnswersCorrect(int answersCorrect) {
+        this.answersCorrect = answersCorrect;
     }
 
     public UUID getGameId() {
@@ -63,14 +61,14 @@ public class Score {
         return endTime;
     }
 
-    public int getScore() {
-        return score;
+    public int getAnswersCorrect() {
+        return answersCorrect;
     }
     
     public static class GameScoreBuilder {
         private UUID gameId;
         private LocalDateTime startTime, endTime;
-        private int score;
+        private int answersCorrect;
 
         public GameScoreBuilder() {
             
@@ -91,8 +89,8 @@ public class Score {
             return this;
         }
 
-        public GameScoreBuilder withScore(int score) {
-            this.score = score;
+        public GameScoreBuilder withAnswersCorrect(int answersCorrect) {
+            this.answersCorrect = answersCorrect;
             return this;
         }
 
@@ -104,7 +102,7 @@ public class Score {
             Score score = new Score();
             score.startTime = this.startTime;
             score.endTime = this.endTime;
-            score.score = this.score;
+            score.answersCorrect = this.answersCorrect;
             return score;
         }
     }
