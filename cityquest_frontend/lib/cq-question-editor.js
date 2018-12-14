@@ -1,8 +1,6 @@
 import AbstractCQElement from './cq-element.js';
 import { Question, Coordinates } from './model/modelClass.js';
 
-var indexAnswers = 0;
-
 class GameQuestionEditor extends AbstractCQElement {
 
     init(gameInstance){
@@ -44,8 +42,8 @@ class GameQuestionEditor extends AbstractCQElement {
             }
         }
         let question = new Question(this.shadowRoot.getElementById("inputQuestion").value, this.shadowRoot.getElementById("inputExtraInformation").value,
-        new Coordinates(Number.parseFloat(this.shadowRoot.getElementById("inpuLatitudeQuestion").value), Number.parseFloat(this.shadowRoot.getElementById("inputLongtitudeQuestion").value)),
-        this.shadowRoot.getElementById("inputCorrectAnswer").value, answerArray);   
+        new Coordinates(Number.parseFloat(this.shadowRoot.getElementById("inputLongtitudeQuestion").value), Number.parseFloat(this.shadowRoot.getElementById("inpuLatitudeQuestion").value)),
+        (this.shadowRoot.getElementById("inputCorrectAnswer").value - 1), answerArray);   
         this.gameInstance.addQuestion(question); 
         this.gameInstance.deleteQuestionForm();
     }

@@ -1,8 +1,6 @@
 import AbstractCQElement from './cq-element.js';
+import CityQuestGameEngine from'./cq-game-engine.js';
 import './cq-show-question.js';
-
-var questionAlreadyDone = new Array();
-var correctQuestions = 0;
 
 class CityQuestGameDetails extends AbstractCQElement {
 
@@ -10,7 +8,7 @@ class CityQuestGameDetails extends AbstractCQElement {
         this.fetchGame(params.id);
     }
 
-    fetchGame(id){   
+    fetchGame(id){
         fetch("http://localhost:8080/games/" + id)
             .then(response => response.json())
             .then(json => this.showGame(json));
@@ -24,6 +22,7 @@ class CityQuestGameDetails extends AbstractCQElement {
         this.shadowRoot.getElementById("gameLongitude").innerHTML = game.coordinates.lon;
 
         this.game = game;
+        this.gameEngine = new CityQuestGameEngine(this.game);
         
         let mapDiv = document.getElementById('map');
         mapDiv.style.display = "block";
@@ -63,25 +62,13 @@ class CityQuestGameDetails extends AbstractCQElement {
                 .addTo(this.map);
         }
 
-        let alreadyAsked = false;
-        this.game.questions.forEach(element => {
-            let distance = this.getDistInMeter(element.coordinates, coords);
-            //Edit to 50, left at high number for testing purpose.
-            if(distance < 20000){
-                for(let i = 0; i < questionAlreadyDone.length; i++){
-                    if(questionAlreadyDone[i] == element){
-                        alreadyAsked = true;
-                    }
-                }
-                if(alreadyAsked == false){
-                    let showQuestion = document.createElement("cq-show-question"); 
-                    this.shadowRoot.getElementById("questionPlaceHolder").appendChild(showQuestion);
-                    showQuestion.init(element, this);
-                    questionAlreadyDone[questionAlreadyDone.length] = element;
-                }
-                alreadyAsked = false;
-            }
-        });
+        let question = this.gameEngine.getNextQuestion(coords);
+        
+        if(question != undefined){
+            let showQuestion = document.createElement("cq-show-question"); 
+            this.shadowRoot.getElementById("questionPlaceHolder").appendChild(showQuestion);
+            showQuestion.init(question, this);
+        }
     }
     showAnswer(result){
         alert(result);
@@ -89,26 +76,10 @@ class CityQuestGameDetails extends AbstractCQElement {
 
     destroy() {
         document.getElementById("map").style.display = 'none';
+        this.map.remove();
+        navigator.geolocation.watchPosition;
     }
-
-    ifCorrectQuestionAddPoint(){
-        correctQuestions++;
-        alert(correctQuestions);
-    }
-
-    getDistInMeter(coordinates1, coordinates2){
-        let R = 6371;
-        let dLat = toRadians(coordinates2.latitude - coordinates1.lat);
-        let dLon = toRadians(coordinates2.longitude - coordinates1.lon);
-
-        let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                   Math.cos(toRadians(coordinates1.lat)) * Math.cos(toRadians(coordinates2.latitude)) *
-                   Math.sin(dLon/2) * Math.sin(dLon/2);
-
-        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-        return (R * c * 1000);
-    }
+    
     get template() {
         return `
             <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>
@@ -154,7 +125,3 @@ class CityQuestGameDetails extends AbstractCQElement {
     }
 }
 customElements.define("cq-game-details", CityQuestGameDetails);
-
-function toRadians(degrees){
-    return degrees * Math.PI / 100;
-}
