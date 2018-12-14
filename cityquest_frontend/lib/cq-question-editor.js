@@ -1,46 +1,58 @@
+import AbstractCQElement from './cq-element.js';
+import { Question, Coordinates } from './model/modelClass.js';
+
 var indexAnswers = 0;
 
-class GameQuestionEditor extends HTMLElement {
+class GameQuestionEditor extends AbstractCQElement {
 
-    init(question){
-        let numberOfAnswers = this.shadowRoot.getElementById("numberOfAnswers");
-        numberOfAnswers.innerHTML = (indexAnswers) + " answers in the question.";
-        this.showQuestion(question);
+    init(gameInstance){
+        this.gameInstance = gameInstance;
+        this.showQuestion();
         this.initEventListeners();
     }
 
-    showQuestion(question){
-        this.shadowRoot.getElementById("inputQuestion").innerHTML = question.question;
+    showQuestion(){
+        /*this.shadowRoot.getElementById("inputQuestion").innerHTML = question.question;
         this.shadowRoot.getElementById("inputExtraInformation").innerHTML = question.extraInformation;
-        this.shadowRoot.getElementById("inpuLatitudeQuestion").innerHTML = question.lat;
-        this.shadowRoot.getElementById("inputLongtitudeQuestion").innerHTML = question.lon;
+        this.shadowRoot.getElementById("inpuLatitudeQuestion").innerHTML = question.coordinates.lat;
+        this.shadowRoot.getElementById("inputLongtitudeQuestion").innerHTML = question.coordinates.lon;
         question.answers.foreach(answer => {
             this.createAnswerInput(answer);
         });
-        this.shadowRoot.getElementById("inputCorrectAnswer").innerHTML = question.correctAnswer;        
+        this.shadowRoot.getElementById("inputCorrectAnswer").innerHTML = question.correctAnswer;  */      
     }
 
     initEventListeners(){
-        this.shadowRoot.getElementById("verifyAnswerButton").addEventListener('click', () => this.createAnswerInput());
-        this.shadowRoot.getElementById("verifyQuestionButton").addEventListener('click', () => this.validateAndSaveQuestion());
+        this.shadowRoot.getElementById("addAnswerButton").addEventListener('click', () => this.addAnswerInput());
+        this.shadowRoot.getElementById("verifyQuestionButton").addEventListener('click', () => this.verifyQuestion());
     }
 
-    createAnswerInput(value){
+    addAnswerInput(){
         let inputAnswer = htmlToElement('<input  type="text" class="form-control" placeholder="Possible answer">');
-        if(value){
-            inputAnswer.value = value;
-        }
+        //if(value){
+        //    inputAnswer.value = value;
+        //}
         this.shadowRoot.getElementById("answers").appendChild(inputAnswer);
-        this.shadowRoot.getElementById("numberOfAnswers").innerHTML = indexAnswers;
-        indexAnswers++;
     }
 
-    validateAndSaveQuestion(){
-        return;
+    verifyQuestion(){
+        let answerArray = new Array();
+        var answerList = this.shadowRoot.getElementById("answers");
+        for(let i = 0; i < answerList.childElementCount; i++){
+            if(answerList.children[i].value !== null && answerList.children[i].value != ""){
+                answerArray.push(answerList.children[i].value);
+            }
+        }
+        let question = new Question(this.shadowRoot.getElementById("inputQuestion").value, this.shadowRoot.getElementById("inputExtraInformation").value,
+        new Coordinates(Number.parseFloat(this.shadowRoot.getElementById("inpuLatitudeQuestion").value), Number.parseFloat(this.shadowRoot.getElementById("inputLongtitudeQuestion").value)),
+        this.shadowRoot.getElementById("inputCorrectAnswer").value, answerArray);   
+        this.gameInstance.addQuestion(question); 
+        this.gameInstance.deleteQuestionForm();
     }
 
     get template(){
         return `
+            <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>
             <div id="questionForm">
                 <div class="form-group">
                     <label for="inputQuestion">Question</label>
@@ -61,19 +73,17 @@ class GameQuestionEditor extends HTMLElement {
                     <small id="longtitudeHelpQuestion" class="form-text text-muted">Find the longtitude. (e.g. via google maps)</small>
                 </div>
                 <div id="answers">
-                    <input type="text" class="form-control" placeholder="Possible answer 1">
-                    <input type="text" class="form-control" placeholder="Possible answer 2">
+                    <input type="text" class="form-control" placeholder="Possible answer">
+                    <input type="text" class="form-control" placeholder="Possible answer">
                 </div>
-                <button type="button" class="btn btn-primary" id="verifyAnswerButton">Add answer</button>
-                <div class="alert alert-warning" role="alert" id="numberOfAnswers"></div>
+                <button type="button" class="btn btn-primary" id="addAnswerButton">+</button>
                 <div class="form-group">
                     <label for="inputCorrectAnswer">Correct answer</label>
                     <input type="number" class="form-control" id="inputCorrectAnswer" name="inputCorrectAnswer" placeholder="Enter a number" min="1" aria-describedby="correctAnswerHelpQueston">
                     <small id="correctAnswerHelpQueston" class="form-text text-muted">Enter the index of the correct answer (starting from 1).</small>
                 </div>
                 <button type="button" class="btn btn-primary" id="verifyQuestionButton">Verify question</button>
-            </div>
-            <div class="alert alert-warning" role="alert" id="numberOfQuestions"></div>`;
+            </div>`;
     }
 
 }

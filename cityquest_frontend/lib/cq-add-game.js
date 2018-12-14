@@ -8,44 +8,54 @@ var index = 0;
 class CityQuestAddGame extends AbstractCQElement {
 
     init(){
-        showGame(game);
-        this.initEventListeners();
+        //this.showGame();
         this.setUp();
-    }
-
-    showGame(game){
-        this.shadowRoot.getElementById("inputName").innerHTML = game.name;
-        this.shadowRoot.getElementById("inputLocation").innerHTML = game.location;
-        this.shadowRoot.getElementById("inputDescription").innerHTML = game.description;
-        this.shadowRoot.getElementById("inputLatitude").innerHTML = game.coordinates.lat;
-        this.shadowRoot.getElementById("inputLongtitude").innerHTML = game.coordinates.lon;
+        this.initEventListeners();
     }
 
     initEventListeners(){
         this.shadowRoot.getElementById("addQuestionButton").addEventListener('click', e => {
             this.questionEditor = document.createElement('cq-question-editor');
             this.shadowRoot.getElementById("questionPlaceHolder").appendChild(this.questionEditor);
-            console.log(this.questionEditor.init());
+            this.questionEditor.init(this);
         });
         this.shadowRoot.getElementById("submitGame").addEventListener('click', () => this.submitGame());
+        this.shadowRoot.getElementById("addAnotherGameButton").addEventListener('click', () => this.setUp());
     }
 
+    deleteQuestionForm(){
+        let questionPlaceHolder = this.shadowRoot.getElementById("questionPlaceHolder");
+        while(questionPlaceHolder.firstChild){
+            questionPlaceHolder.removeChild(questionPlaceHolder.firstChild);
+        }
+    }
+
+    addQuestion(question){
+        this.deleteQuestionForm();
+        questions[index] = question;
+        index++;
+        this.shadowRoot.getElementById("numberOfQuestions").innerHTML = (index) + " questions in the game.";
+    }
+
+    /*showGame(){
+        this.shadowRoot.getElementById("inputName").innerHTML = game.name;
+        this.shadowRoot.getElementById("inputLocation").innerHTML = game.location;
+        this.shadowRoot.getElementById("inputDescription").innerHTML = game.description;
+        this.shadowRoot.getElementById("inputLatitude").innerHTML = game.coordinates.lat;
+        this.shadowRoot.getElementById("inputLongtitude").innerHTML = game.coordinates.lon;
+    }*/
+
     setUp(){
-        let numberOfQuestions = this.shadowRoot.getElementById("numberOfQuestions");
-        numberOfQuestions.innerHTML = (index) + " questions in the game.";
+        this.shadowRoot.getElementById("numberOfQuestions").innerHTML = (index) + " questions in the game.";
 
-        let questionForm = this.shadowRoot.getElementById("questionForm");
-        questionForm.style.display = "none";
-
-        let verifyQuestionButton = this.shadowRoot.getElementById("verifyQuestionButton");
+        /*let verifyQuestionButton = this.shadowRoot.getElementById("verifyQuestionButton");
         verifyQuestionButton.onclick =() => {
             this.addQuestionToList();
-        }
+        }*/
 
-        let addAnotherGameButton = this.shadowRoot.getElementById("addAnotherGameButton");
-        addAnotherGameButton.style.display = "none";
-        let gameAdded = this.shadowRoot.getElementById("gameAdded");
-        gameAdded.style.display = "none";
+        this.shadowRoot.getElementById('formAddGame').style.display = "block";
+        this.shadowRoot.getElementById("addAnotherGameButton").style.display = "none";
+        this.shadowRoot.getElementById("gameAdded").style.display = "none";
     }
     /*
     addQuestionToList(){
@@ -94,7 +104,6 @@ class CityQuestAddGame extends AbstractCQElement {
         inputLatitude.value = "";
 
         index = 0;
-        indexAnswers = 0;
 
         fetch("http://localhost:8080/games",
         {
@@ -124,7 +133,7 @@ class CityQuestAddGame extends AbstractCQElement {
 
             <h3>Add a game</h3>
             <div class="alert alert-success" role="alert" id="gameAdded">Game added succesfully.</div>
-            <button onclick="window.location.href='addGameForm.html'" class="btn btn-primary" id="addAnotherGameButton">Add another game</button>
+            <button class="btn btn-primary" id="addAnotherGameButton">Add another game</button>
 
             <form id="formAddGame">
                 <div class="form-group">
@@ -153,7 +162,8 @@ class CityQuestAddGame extends AbstractCQElement {
                     <label>Add questions: </label><br>
                     <button id="addQuestionButton" class="btn btn-primary" type="button">+</button>
                 </div>
-                <div id="questionPlaceHolder></div>
+                <div id="questionPlaceHolder"></div>
+                <div class="alert alert-warning" role="alert" id="numberOfQuestions"></div>
                 <button type="button" class="btn btn-primary" id="submitGame">Submit</button>
             </form>
         `;

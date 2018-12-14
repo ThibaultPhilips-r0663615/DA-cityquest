@@ -2,9 +2,11 @@ import AbstractCQElement from './cq-element.js'
 
 class CityQuestShowQuestion extends AbstractCQElement{
 
-    init(element, parent){
-        this.showQuestion(element);
-        this.initEventListeners(parent);
+    init(question, gameDetailsInstance){
+        this.question = question;
+        this.gameDetailsInstance = gameDetailsInstance;
+        this.showQuestion(question);
+        this.initEventListeners();
     }
 
     showQuestion(element){
@@ -24,18 +26,18 @@ class CityQuestShowQuestion extends AbstractCQElement{
             correctAnswerSelect.appendChild(option);
             count++;
         });
-        //let sendButton = this.shadowRoot.getElementById("SendAnswer");
-        //sendButton.onclick =() => this.sendAnswer();
         $(this.shadowRoot.getElementById("QuestionModal")).modal('show');
     }
 
     sendAnswer(){
         let selectedAnswer = document.getElementById("QuestionAnswer");
-        return selectedAnswer.options[selectedAnswer.selectedIndex].text;
+        if(this.question.correctAnswer == selectedAnswer.options[selectedAnswer.selectedIndex].value){
+            this.gameDetailsInstance.ifCorrectQuestionAddPoint();
+        }
     }
 
-    initEventListeners(parent){
-        document.getElementById("QuestionAnswer").addEventListener('click', () => this.sendAnswer());
+    initEventListeners(){
+        document.getElementById("SendAnswer").addEventListener('click', () => this.sendAnswer());
     }
 
     get template (){

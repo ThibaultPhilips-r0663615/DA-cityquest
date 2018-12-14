@@ -2,6 +2,7 @@ import AbstractCQElement from './cq-element.js';
 import './cq-show-question.js';
 
 var questionAlreadyDone = new Array();
+var correctQuestions = 0;
 
 class CityQuestGameDetails extends AbstractCQElement {
 
@@ -25,6 +26,7 @@ class CityQuestGameDetails extends AbstractCQElement {
         this.game = game;
         
         let mapDiv = document.getElementById('map');
+        mapDiv.style.display = "block";
         this.map = L.map(mapDiv, {center: [game.coordinates.lat, game.coordinates.lon], zoom: 14.4, zoomSnap: 0.1});
         L
             .tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
@@ -74,7 +76,7 @@ class CityQuestGameDetails extends AbstractCQElement {
                 if(alreadyAsked == false){
                     let showQuestion = document.createElement("cq-show-question"); 
                     this.shadowRoot.getElementById("questionPlaceHolder").appendChild(showQuestion);
-                    showQuestion.init(element);
+                    showQuestion.init(element, this);
                     questionAlreadyDone[questionAlreadyDone.length] = element;
                 }
                 alreadyAsked = false;
@@ -86,9 +88,12 @@ class CityQuestGameDetails extends AbstractCQElement {
     }
 
     destroy() {
-        this.mapDiv.style.display = 'none';
-        this.map.remove();
-        navigator.geolocation.watchPosition
+        document.getElementById("map").style.display = 'none';
+    }
+
+    ifCorrectQuestionAddPoint(){
+        correctQuestions++;
+        alert(correctQuestions);
     }
 
     getDistInMeter(coordinates1, coordinates2){
