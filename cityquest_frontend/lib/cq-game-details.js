@@ -1,6 +1,7 @@
 import AbstractCQElement from './cq-element.js';
 import CityQuestGameEngine from'./cq-game-engine.js';
 import './cq-show-question.js';
+import './cq-result-screen.js';
 
 class CityQuestGameDetails extends AbstractCQElement {
 
@@ -15,14 +16,12 @@ class CityQuestGameDetails extends AbstractCQElement {
     }
 
     showGame(game) {
+        this.gameEngine = new CityQuestGameEngine(game, this);
         this.shadowRoot.getElementById("gameName").innerHTML = game.name;
         this.shadowRoot.getElementById("gameDescription").innerHTML = game.description;
         this.shadowRoot.getElementById("gameLocation").innerHTML = game.location;
         this.shadowRoot.getElementById("gameLatitude").innerHTML = game.coordinates.lat;
         this.shadowRoot.getElementById("gameLongitude").innerHTML = game.coordinates.lon;
-
-        this.game = game;
-        this.gameEngine = new CityQuestGameEngine(this.game);
         
         let mapDiv = document.getElementById('map');
         mapDiv.style.display = "block";
@@ -67,11 +66,14 @@ class CityQuestGameDetails extends AbstractCQElement {
         if(question != undefined){
             let showQuestion = document.createElement("cq-show-question"); 
             this.shadowRoot.getElementById("questionPlaceHolder").appendChild(showQuestion);
-            showQuestion.init(question, this);
+            showQuestion.init(question, this.gameEngine);
         }
     }
-    showAnswer(result){
-        alert(result);
+
+    showGameResult(result){
+        let showResultScreen = document.createElement("cq-result-screen"); 
+        this.shadowRoot.getElementById("resultPlaceHolder").appendChild(showResultScreen);
+        showResultScreen.init(result, this.gameEngine);
     }
 
     destroy() {
@@ -119,8 +121,8 @@ class CityQuestGameDetails extends AbstractCQElement {
                 <div><img src="./images/marker_black.png"><p> The location of the question!</p></div>
             </div>
 
-            <div id="questionPlaceHolder">
-            </div>
+            <div id="questionPlaceHolder"></div>
+            <div id="resultPlaceHolder"></div>
         `;
     }
 }

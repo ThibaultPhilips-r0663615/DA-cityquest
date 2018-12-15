@@ -43,7 +43,7 @@ class GameQuestionEditor extends AbstractCQElement {
         }
         let question = new Question(this.shadowRoot.getElementById("inputQuestion").value, this.shadowRoot.getElementById("inputExtraInformation").value,
         new Coordinates(Number.parseFloat(this.shadowRoot.getElementById("inputLongtitudeQuestion").value), Number.parseFloat(this.shadowRoot.getElementById("inpuLatitudeQuestion").value)),
-        (this.shadowRoot.getElementById("inputCorrectAnswer").value - 1), answerArray);   
+        this.shadowRoot.getElementById("inputCorrectAnswer").value, answerArray);   
         this.gameInstance.addQuestion(question); 
         this.gameInstance.deleteQuestionForm();
     }

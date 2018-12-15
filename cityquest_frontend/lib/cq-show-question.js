@@ -2,9 +2,9 @@ import AbstractCQElement from './cq-element.js'
 
 class CityQuestShowQuestion extends AbstractCQElement{
 
-    init(question, gameDetailsInstance){
+    init(question, gameEngineInstance,){
         this.question = question;
-        this.gameDetailsInstance = gameDetailsInstance;
+        this.gameEngineInstance = gameEngineInstance;
         this.showQuestion(question);
         this.initEventListeners();
     }
@@ -31,13 +31,15 @@ class CityQuestShowQuestion extends AbstractCQElement{
 
     sendAnswer(){
         let selectedAnswer = document.getElementById("QuestionAnswer");
-        if(this.question.correctAnswer == selectedAnswer.options[selectedAnswer.selectedIndex].value){
-            this.gameDetailsInstance.ifCorrectQuestionAddPoint();
-        }
+        this.gameEngineInstance.correctAnswer(selectedAnswer.options[selectedAnswer.selectedIndex].value, this.question);
     }
 
     initEventListeners(){
-        document.getElementById("SendAnswer").addEventListener('click', () => this.sendAnswer());
+        document.addEventListener('click',function(e){
+            if(e.target && e.target.id== 'SendAnswer'){
+                this.sendAnswer();
+            }
+        }.bind(this));
     }
 
     get template (){
@@ -60,8 +62,7 @@ class CityQuestShowQuestion extends AbstractCQElement{
                         <div id="QuestionPossibleAnswers">
                         </div>
                         <p class="question-detail-label">Select the correct answer.</p>
-                        <select multiple class="form-control" id="QuestionAnswer">
-                        </select>
+                        <select multiple class="form-control" id="QuestionAnswer"></select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -48,46 +48,11 @@ class CityQuestAddGame extends AbstractCQElement {
     setUp(){
         this.shadowRoot.getElementById("numberOfQuestions").innerHTML = (index) + " questions in the game.";
 
-        /*let verifyQuestionButton = this.shadowRoot.getElementById("verifyQuestionButton");
-        verifyQuestionButton.onclick =() => {
-            this.addQuestionToList();
-        }*/
-
         this.shadowRoot.getElementById('formAddGame').style.display = "block";
         this.shadowRoot.getElementById("addAnotherGameButton").style.display = "none";
         this.shadowRoot.getElementById("gameAdded").style.display = "none";
     }
-    /*
-    addQuestionToList(){
-        let question = this.shadowRoot.getElementById("inputQuestion");
-        let extraInformation = this.shadowRoot.getElementById("inputExtraInformation");
-        let longtitudeQuestion = this.shadowRoot.getElementById("inputLongtitudeQuestion");
-        let latitudeQuestion = this.shadowRoot.getElementById("inpuLatitudeQuestion");
-        let correctAnswer = this.shadowRoot.getElementById("inputCorrectAnswer");
 
-        var questionObject = new Question(question.value, extraInformation.value, new Coordinates(longtitudeQuestion.value, latitudeQuestion.value), (correctAnswer.value - 1), answers);
-
-        question.value = "";
-        extraInformation.value = "";
-        longtitudeQuestion.value = "";
-        latitudeQuestion.value = "";
-        correctAnswer.value = "";
-        
-        questions[index] = questionObject;
-        index++;
-        let numberOfQuestions = this.shadowRoot.getElementById("numberOfQuestions");
-        numberOfQuestions.innerHTML = (index) + " questions in the game.";
-        let questionForm = this.shadowRoot.getElementById("questionForm");
-        questionForm.style.display = "none";
-
-        indexAnswers = 0;
-        answers = new Array();
-        let numberOfAnswers = this.shadowRoot.getElementById("numberOfAnswers");
-        numberOfAnswers.innerHTML = (indexAnswers) + " answers in the question.";
-        let answerForm = this.shadowRoot.getElementById("answerForm");
-        answerForm.style.display = "none";
-        
-    }*/
     submitGame(){
         let inputName = this.shadowRoot.getElementById("inputName");
         let inputLocation = this.shadowRoot.getElementById("inputLocation");

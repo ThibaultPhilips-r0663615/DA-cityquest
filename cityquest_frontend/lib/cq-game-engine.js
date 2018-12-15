@@ -1,32 +1,39 @@
 export default class CityQuestGameEngine {
 
-    constructor(gameInstance){
+    constructor(gameInstance, gameDetailsInstance){
+        this.isGameDone = false;
         this.questionsDone = new Array();
         this.startTime = new Date();
         this.gameInstance = gameInstance;
+        this.gameDetailsInstance = gameDetailsInstance;
         this.score = 0;
-        this.index = 0;
+        this.duration = 0;
     }
 
-    correctAnswer(answer, index){
-        if(answer == gameInstance.questions[index].correctAnswer){
+    correctAnswer(answer, question){
+        if(answer == question.correctAnswer){
             this.score++;
+        }
+        if(this.gameInstance.questions.length == this.questionsDone.length){
+            this.gameDone();
         }
     }
 
     getNextQuestion(coords){
         let questionToBeReturned;
+        let questionFound = false;
         this.gameInstance.questions.forEach(question => {
             let distance = this.getDistInMeter(question.coordinates, coords);
             let alreadyAsked = false;
-            if(distance < 20000){
+            if(distance < 40000 && questionFound == false){
                 for(let i = 0; i < this.questionsDone.length; i++){
                     if(this.questionsDone[i] == question){
                         alreadyAsked = true;
                     }
-                }
+                }   
                 if(alreadyAsked == false){
                     this.questionsDone[this.questionsDone.length] = question;
+                    questionFound = true;
                     questionToBeReturned = question;
                 }
             }
@@ -34,10 +41,13 @@ export default class CityQuestGameEngine {
         return questionToBeReturned;
     }
 
+    isGameDone(){
+        return this.isGameDone;
+    }
+
     gameDone(){
         this.endTime = new Date();
         var score = { gameId: this.gameInstance.id, startTime: this.startTime, endTime: this.endTime, answersCorrect: this.score};
-        alert(JSON.stringify(score));
 
         fetch("http://localhost:8080/scores",
         {
@@ -47,6 +57,23 @@ export default class CityQuestGameEngine {
             },
             body: JSON.stringify(score)
         })
+
+        fetch("http://localhost:8080/scores/" + this.gameInstance.id)
+            .then(response => response.json())
+            .then(json => this.showResult(json));;
+    }
+
+    showResult(result){
+        this.gameDetailsInstance.showGameResult(result);
+    }
+
+    getDuration(){
+        this.duration = (this.endTime.getTime() - this.startTime.getTime()) / 1000;
+        return this.duration;
+    }
+
+    getScore(){
+        return this.score;
     }
 
     getDistInMeter(coordinates1, coordinates2){
