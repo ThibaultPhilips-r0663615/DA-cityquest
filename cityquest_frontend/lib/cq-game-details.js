@@ -7,6 +7,7 @@ class CityQuestGameDetails extends AbstractCQElement {
 
     init(params){
         this.fetchGame(params.id);
+        this.questionBeingHandled = false;
     }
 
     fetchGame(id){
@@ -61,13 +62,20 @@ class CityQuestGameDetails extends AbstractCQElement {
                 .addTo(this.map);
         }
 
-        let question = this.gameEngine.getNextQuestion(coords);
-        
-        if(question != undefined){
-            let showQuestion = document.createElement("cq-show-question"); 
-            this.shadowRoot.getElementById("questionPlaceHolder").appendChild(showQuestion);
-            showQuestion.init(question, this.gameEngine);
+
+        if(this.questionBeingHandled == false){
+            let question = this.gameEngine.getNextQuestion(coords);
+            if(question != undefined){
+                this.questionBeingHandled = true;
+                let showQuestion = document.createElement("cq-show-question"); 
+                this.shadowRoot.getElementById("questionPlaceHolder").appendChild(showQuestion);
+                showQuestion.init(question, this.gameEngine);
+            }
         }
+    }
+
+    setQuestionBeingHandled(value){
+        this.questionBeingHandled = value;
     }
 
     showGameResult(result){

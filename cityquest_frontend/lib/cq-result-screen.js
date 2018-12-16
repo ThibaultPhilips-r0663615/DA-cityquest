@@ -20,6 +20,7 @@ class CityQuestResultScreen extends AbstractCQElement {
     initEventListeners(){
         document.addEventListener('click',function(e){
             if(e.target && e.target.id== 'backButton'){
+                $(this.shadowRoot.getElementById("ResultScreenModal")).modal('dispose');
                 this.app.router.navigate('/home');
             }
         }.bind(this));

@@ -11,17 +11,37 @@ export default class CityQuestGameEngine {
     }
 
     correctAnswer(answer, question){
-        if(answer == question.correctAnswer){
-            this.score++;
-        }
-        if(this.gameInstance.questions.length == this.questionsDone.length){
-            this.gameDone();
+        if(this.questionAlreadyDone(question) == false){
+            if(answer == question.correctAnswer){
+                this.score++;
+            }
+            this.questionsDone[this.questionsDone.length] = question;
+            if(this.gameInstance.questions.length == this.questionsDone.length){
+                this.gameDone();
+            }
+            this.gameDetailsInstance.setQuestionBeingHandled(false);
         }
     }
 
     getNextQuestion(coords){
         let questionToBeReturned;
         let questionFound = false;
+        let i = 0;
+        while((i < this.gameInstance.questions.length) && (questionFound == false)){
+            let distance = this.getDistInMeter(this.gameInstance.questions[i].coordinates, coords);
+
+            if(distance < 40000){
+                if(this.questionAlreadyDone(this.gameInstance.questions[i]) == false){
+                    //this.questionsDone[this.questionsDone.length] = this.gameInstance.questions[i];
+                    questionFound = true;
+                    questionToBeReturned = this.gameInstance.questions[i];
+                }
+            }
+            i++;
+        }
+        return questionToBeReturned;
+        
+        /*
         this.gameInstance.questions.forEach(question => {
             let distance = this.getDistInMeter(question.coordinates, coords);
             let alreadyAsked = false;
@@ -38,7 +58,17 @@ export default class CityQuestGameEngine {
                 }
             }
         });
-        return questionToBeReturned;
+        return questionToBeReturned;*/
+    }
+
+    questionAlreadyDone(question){
+        let inList = false;
+        this.questionsDone.forEach(element => {
+            if(element == question){
+                inList = true;
+            }
+        });
+        return inList;
     }
 
     isGameDone(){
@@ -56,11 +86,11 @@ export default class CityQuestGameEngine {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(score)
-        })
+        });
 
         fetch("http://localhost:8080/scores/" + this.gameInstance.id)
             .then(response => response.json())
-            .then(json => this.showResult(json));;
+            .then(json => this.showResult(json));
     }
 
     showResult(result){

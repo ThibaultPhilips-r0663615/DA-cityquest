@@ -7,6 +7,7 @@ class CityQuestShowQuestion extends AbstractCQElement{
         this.gameEngineInstance = gameEngineInstance;
         this.showQuestion(question);
         this.initEventListeners();
+        this.active = true;
     }
 
     showQuestion(element){
@@ -26,18 +27,23 @@ class CityQuestShowQuestion extends AbstractCQElement{
             correctAnswerSelect.appendChild(option);
             count++;
         });
-        $(this.shadowRoot.getElementById("QuestionModal")).modal('show');
+        $(this.shadowRoot.getElementById("QuestionModal")).modal();
     }
 
     sendAnswer(){
         let selectedAnswer = document.getElementById("QuestionAnswer");
-        this.gameEngineInstance.correctAnswer(selectedAnswer.options[selectedAnswer.selectedIndex].value, this.question);
+        let value = selectedAnswer.options[selectedAnswer.selectedIndex].value;
+        document.getElementById("QuestionModal").remove();
+        this.gameEngineInstance.correctAnswer(value, this.question); 
+        this.active = false;  
     }
 
     initEventListeners(){
         document.addEventListener('click',function(e){
             if(e.target && e.target.id== 'SendAnswer'){
-                this.sendAnswer();
+                if(this.active){
+                    this.sendAnswer();
+                }
             }
         }.bind(this));
     }
