@@ -5,9 +5,7 @@ export default class AbstractCQElement extends HTMLElement {
     }
 
     initShadowDom(){
-        if(this.shadowRoot){
-            return;
-        }
+        if(this.shadowRoot) return;
         let shadowRoot = this.attachShadow({ mode : "open" });
         shadowRoot.innerHTML = this.template;
     }
@@ -18,5 +16,13 @@ export default class AbstractCQElement extends HTMLElement {
 
     get app() {
         return document.querySelector('cq-app');
+    }
+
+    byId(id) {
+        return this.shadowRoot.querySelector(`#${id}`);
+    }
+
+    byCss(cssSelector) {
+        return this.shadowRoot.querySelector(cssSelector);
     }
 }

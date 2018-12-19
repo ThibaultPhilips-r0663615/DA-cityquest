@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import idk.database.GameRepository;
 import idk.model.Game;
 import org.json.JSONException;
-import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,8 +17,8 @@ public class GameControllerIT extends AbstractControllerIT {
 
 	@Autowired private GameRepository gameRepository;
 
-	@After
-	public void cleanUp(){
+	@Before
+	public void setup(){
 		gameRepository.deleteAll();
 	}
 
