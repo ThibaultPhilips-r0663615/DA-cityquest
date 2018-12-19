@@ -10,10 +10,14 @@ export default class CityQuestGameEngine {
 
     checkAnswer(answer, question){
         if(!this.questionsDone.includes(question)){
-            if(answer === question.correctAnswer) this.score++;
-
             this.questionsDone.push(question);
+
+            if(answer === question.correctAnswer){
+                this.score++;
+                return true;
+            }
         }
+        return false;
     }
 
     getNextQuestion(coords){

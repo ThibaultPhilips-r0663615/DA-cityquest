@@ -10,24 +10,26 @@ class CityQuestShowQuestion extends AbstractCQElement{
         this.showQuestion(question);
     }
 
-    showQuestion(element){
+    showQuestion(question){
         this.shadowRoot.innerHTML = this.questionTemplate;  // Why? html get erased after we call modal during previous question
 
-        this.byId("QuestionTitle").innerHTML        = element.question;
-        this.byId("QuestionLatitude").innerHTML     = element.coordinates.lat;
-        this.byId("QuestionLongitude").innerHTML    = element.coordinates.lon;
+        this.byId("QuestionTitle").innerHTML        = question.question;
+        this.byId("QuestionLatitude").innerHTML     = question.coordinates.lat;
+        this.byId("QuestionLongitude").innerHTML    = question.coordinates.lon;
+        this.byId("ExtraInformation").innerHTML     = question.extraInformation;
 
         let answersDiv = this.byId("QuestionPossibleAnswers");
         let correctAnswerSelect = this.byId("QuestionAnswer");
         let count = 0;
 
-        element.answers.forEach(element => {
+        question.answers.forEach(element => {
             count++;
             answersDiv.appendChild(htmlToElement('<p>' + count + `: ` + element + '</p>'));
             correctAnswerSelect.appendChild(htmlToElement('<option>' + count + '</option>'));
         });
 
         this.byId("SendAnswer").addEventListener("click", () => this.sendAnswer());
+        this.byId("CloseQuestion").addEventListener('click', () => this.closeQuestion());
 
         $(this.byId("QuestionModal")).modal();
     }
@@ -35,10 +37,19 @@ class CityQuestShowQuestion extends AbstractCQElement{
     sendAnswer(){
         let selectedAnswer = document.getElementById("QuestionAnswer").selectedIndex + 1;
 
+        if(this.gameEngine.checkAnswer(selectedAnswer, this.question)){
+            document.getElementById('Result').innerHTML = `Correct answer`;
+        } else {
+            document.getElementById('Result').innerHTML = `Wrong answer`;
+        }
+
+        document.querySelectorAll('.modal-body, .modal-footer > button')
+            .forEach(element => element.classList.toggle('invisible'));
+    }
+
+    closeQuestion(){
         document.getElementById("QuestionModal").remove();
         this.isQuestionActive = false;
-
-        this.gameEngine.checkAnswer(selectedAnswer, this.question);
         if(this.gameEngine.isGameDone) this.dispatchEvent(new Event("GameFinished"));
     }
 
@@ -49,9 +60,6 @@ class CityQuestShowQuestion extends AbstractCQElement{
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="QuestionTitle"></h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
                         </div>
                         <div class="modal-body">
                             <p class="question-detail-label">Latitude of the question: </p>     <p id="QuestionLatitude"></p> 
@@ -59,9 +67,13 @@ class CityQuestShowQuestion extends AbstractCQElement{
                             <p class="question-detail-label">All the possible answers: </p>     <div id="QuestionPossibleAnswers"></div>
                             <p class="question-detail-label">Select the correct answer.</p>     <select id="QuestionAnswer" multiple class="form-control"></select>
                         </div>
+                        <div class="modal-body invisible">
+                            <p><b>Result</b></p>                   <p id="Result"></p>
+                            <p><b>Extra information:</b></p>       <p id="ExtraInformation"></p>
+                        </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="SendAnswer" data-dismiss="modal" class="btn btn-primary">Send answer</button>
+                            <button id="SendAnswer" class="btn btn-primary">Send answer</button>
+                            <button id="CloseQuestion" data-dismiss="modal" class="btn btn-primary invisible">Close</button>
                         </div>
                     </div>
                 </div>
