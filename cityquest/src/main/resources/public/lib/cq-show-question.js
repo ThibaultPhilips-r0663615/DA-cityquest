@@ -2,9 +2,9 @@ import AbstractCQElement from './cq-element.js';
 
 class CityQuestShowQuestion extends AbstractCQElement{
 
-    activateQuestion(question, gameEngineInstance,){
+    activateQuestion(question, gameEngine,){
         this.question = question;
-        this.gameEngineInstance = gameEngineInstance;
+        this.gameEngine = gameEngine;
 
         this.isQuestionActive = true;
         this.showQuestion(question);
@@ -38,8 +38,8 @@ class CityQuestShowQuestion extends AbstractCQElement{
         document.getElementById("QuestionModal").remove();
         this.isQuestionActive = false;
 
-        this.gameEngineInstance.checkAnswer(selectedAnswer, this.question);
-        if(this.gameEngineInstance.isGameDone) this.dispatchEvent(new Event("GameFinished"));
+        this.gameEngine.checkAnswer(selectedAnswer, this.question);
+        if(this.gameEngine.isGameDone) this.dispatchEvent(new Event("GameFinished"));
     }
 
     get questionTemplate () {

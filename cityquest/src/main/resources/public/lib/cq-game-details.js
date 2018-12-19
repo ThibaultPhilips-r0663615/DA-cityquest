@@ -7,7 +7,7 @@ class CityQuestGameDetails extends AbstractCQElement {
 
     init(params){
         this.shadowRoot.loadScript('https://unpkg.com/leaflet@1.3.4/dist/leaflet.js')       // Why? Scripts are only loaded when using appendChild
-            .thenFetch("http://localhost:8080/games/" + params.id)                          // Why? Scripts are loaded async, so use promise to execute code afterwards
+            .thenFetch(backendUrl + "/games/" + params.id)                          // Why? Scripts are loaded async, so use promise to execute code afterwards
             .then(response => response.json())
             .then(json => this.showGame(json));
     }

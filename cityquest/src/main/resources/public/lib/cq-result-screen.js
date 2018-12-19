@@ -11,7 +11,10 @@ class CityQuestResultScreen extends AbstractCQElement {
             this.byId('GameDurationAverage').innerHTML  = result.averageDurationInSeconds + 's';
             this.byId('GameScoreAverage').innerHTML     = result.averageAnswersCorrect;
 
-            this.byId("backButton").addEventListener("click", () => this.app.router.navigate('/home'));
+            this.byId("backButton").addEventListener("click", () => {
+                document.getElementById("ResultScreenModal").remove();
+                this.app.router.navigate('/home')
+            });
 
             $(this.shadowRoot.getElementById("ResultScreenModal")).modal('show');
         });

@@ -3,52 +3,44 @@ import { Question, Coordinates } from './model/modelClass.js';
 
 class GameQuestionEditor extends AbstractCQElement {
 
-    init(gameInstance){
-        this.gameInstance = gameInstance;
-        this.showQuestion();
+    show(){
+        this.shadowRoot.innerHTML = this.questionEditorTemplate;
         this.initEventListeners();
     }
 
-    showQuestion(){
-        /*this.shadowRoot.getElementById("inputQuestion").innerHTML = question.question;
-        this.shadowRoot.getElementById("inputExtraInformation").innerHTML = question.extraInformation;
-        this.shadowRoot.getElementById("inpuLatitudeQuestion").innerHTML = question.coordinates.lat;
-        this.shadowRoot.getElementById("inputLongtitudeQuestion").innerHTML = question.coordinates.lon;
-        question.answers.foreach(answer => {
-            this.createAnswerInput(answer);
-        });
-        this.shadowRoot.getElementById("inputCorrectAnswer").innerHTML = question.correctAnswer;  */      
+    hide(){
+        this.shadowRoot.innerHTML = ``;
     }
 
     initEventListeners(){
-        this.shadowRoot.getElementById("addAnswerButton").addEventListener('click', () => this.addAnswerInput());
-        this.shadowRoot.getElementById("verifyQuestionButton").addEventListener('click', () => this.verifyQuestion());
+        this.byId("addAnswerButton").addEventListener('click', () => this.addAnswerInputField());
+        this.byId("verifyQuestionButton").addEventListener('click', () => this.verifyQuestion());
     }
 
-    addAnswerInput(){
-        let inputAnswer = htmlToElement('<input  type="text" class="form-control" placeholder="Possible answer">');
-        //if(value){
-        //    inputAnswer.value = value;
-        //}
-        this.shadowRoot.getElementById("answers").appendChild(inputAnswer);
+    addAnswerInputField(){
+        this.byId('answers').appendChild(htmlToElement(`
+            <input type="text" class="form-control" placeholder="Possible answer">`
+        ));
     }
 
     verifyQuestion(){
-        let answerArray = new Array();
-        var answerList = this.shadowRoot.getElementById("answers");
-        for(let i = 0; i < answerList.childElementCount; i++){
-            if(answerList.children[i].value !== null && answerList.children[i].value != ""){
-                answerArray.push(answerList.children[i].value);
-            }
-        }
-        let question = new Question(this.shadowRoot.getElementById("inputQuestion").value, this.shadowRoot.getElementById("inputExtraInformation").value,
-        new Coordinates(Number.parseFloat(this.shadowRoot.getElementById("inputLongtitudeQuestion").value), Number.parseFloat(this.shadowRoot.getElementById("inpuLatitudeQuestion").value)),
-        this.shadowRoot.getElementById("inputCorrectAnswer").value, answerArray);   
-        this.gameInstance.addQuestion(question); 
-        this.gameInstance.deleteQuestionForm();
+        let answers = Array.from(this.byId("answers").children, child => child.value).filter(answer => answer !== null && answer !== "");
+
+        this.question = new Question(
+            this.byId("inputQuestion").value,
+            this.byId("inputExtraInformation").value,
+            new Coordinates(
+                this.byId("inputLongitudeQuestion").value,
+                this.byId("inputLatitudeQuestion").value
+            ),
+            this.byId("inputCorrectAnswer").value,
+            answers
+        );
+
+        this.dispatchEvent(new Event("QuestionCreated"));
     }
 
-    get template(){
+    get questionEditorTemplate(){
         return `
             <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>
             <div id="questionForm">
@@ -61,14 +53,14 @@ class GameQuestionEditor extends AbstractCQElement {
                     <textarea class="form-control" id="inputExtraInformation" placeholder="Give some extra information" rows="10" cols="40"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="inpuLatitudeQuestion">Latitude</label>
-                    <input type="text" class="form-control" id="inpuLatitudeQuestion" name="inpuLatitudeQuestion" placeholder="Enter a latitude" aria-describedby="latitudeHelpQueston">
+                    <label for="inputLatitudeQuestion">Latitude</label>
+                    <input type="text" class="form-control" id="inputLatitudeQuestion" name="inputLatitudeQuestion" placeholder="Enter a latitude" aria-describedby="latitudeHelpQuestion">
                     <small id="latitudeHelpQuestion" class="form-text text-muted">Find the latitude. (e.g. via google maps)</small>
                 </div>
                 <div class="form-group">
-                    <label for="inputLongtitudeQuestion">Longtitude </label>
-                    <input type="text" class="form-control" id="inputLongtitudeQuestion" name="inputLongtitudeQuestion" placeholder="Enter a longtitude" aria-describedby="longtitudeHelpQuestion">
-                    <small id="longtitudeHelpQuestion" class="form-text text-muted">Find the longtitude. (e.g. via google maps)</small>
+                    <label for="inputLongitudeQuestion">Longtitude </label>
+                    <input type="text" class="form-control" id="inputLongitudeQuestion" name="inputLongitudeQuestion" placeholder="Enter a longitude" aria-describedby="longitudeHelpQuestion">
+                    <small id="longitudeHelpQuestion" class="form-text text-muted">Find the longitude. (e.g. via google maps)</small>
                 </div>
                 <div id="answers">
                     <input type="text" class="form-control" placeholder="Possible answer">
@@ -78,10 +70,14 @@ class GameQuestionEditor extends AbstractCQElement {
                 <div class="form-group">
                     <label for="inputCorrectAnswer">Correct answer</label>
                     <input type="number" class="form-control" id="inputCorrectAnswer" name="inputCorrectAnswer" placeholder="Enter a number" min="1" aria-describedby="correctAnswerHelpQueston">
-                    <small id="correctAnswerHelpQueston" class="form-text text-muted">Enter the index of the correct answer (starting from 1).</small>
+                    <small id="correctAnswerHelpQuestion" class="form-text text-muted">Enter the index of the correct answer (starting from 1).</small>
                 </div>
                 <button type="button" class="btn btn-primary" id="verifyQuestionButton">Verify question</button>
             </div>`;
+    }
+
+    get template() {
+        return ``;
     }
 
 }

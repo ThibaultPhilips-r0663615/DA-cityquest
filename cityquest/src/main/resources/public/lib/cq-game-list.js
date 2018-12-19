@@ -3,7 +3,7 @@ import AbstractCQElement from './cq-element.js';
 class GameList extends AbstractCQElement {
 
     init(){
-        fetch("http://localhost:8080/games/")
+        fetch(backendUrl + "/games/")
             .then(response => response.json())
             .then(json => this.showGameList(json));
     }
@@ -31,7 +31,7 @@ class GameList extends AbstractCQElement {
                 </li>
             `);
 
-            gamePlayLi.onclick = () => { this.toggleList(gamePlayLi, gameDetailsLi); };
+            gamePlayLi.onclick = () => this.toggleList(gamePlayLi, gameDetailsLi);
             gamePlayLi.querySelector("button").addEventListener("click", () => this.app.router.navigate('/games/' + element.id));
 
             outerUl.appendChild(gamePlayLi);

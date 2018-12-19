@@ -19,7 +19,7 @@ export default class AbstractCQElement extends HTMLElement {
     }
 
     byId(id) {
-        return this.shadowRoot.querySelector(`#${id}`);
+        return this.shadowRoot.getElementById(id);
     }
 
     byCss(cssSelector) {

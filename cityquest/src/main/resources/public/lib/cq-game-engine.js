@@ -29,7 +29,7 @@ export default class CityQuestGameEngine {
     fetchResult(){
         let score = { gameId: this.gameInstance.id, startTime: this.startTime, endTime: new Date(), answersCorrect: this.score};
 
-        return fetch("http://localhost:8080/scores",
+        return fetch(backendUrl + "/scores",
         {
             method: "POST",
             headers:{
@@ -37,7 +37,7 @@ export default class CityQuestGameEngine {
             },
             body: JSON.stringify(score)
         })
-            .thenFetch("http://localhost:8080/scores/" + this.gameInstance.id)
+            .thenFetch(backendUrl + "/scores/" + this.gameInstance.id)
             .then(response => response.json());
     }
 
@@ -50,9 +50,10 @@ export default class CityQuestGameEngine {
         let dLat = this.toRadians(coordinates2.latitude - coordinates1.lat);
         let dLon = this.toRadians(coordinates2.longitude - coordinates1.lon);
 
-        let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                   Math.cos(this.toRadians(coordinates1.lat)) * Math.cos(this.toRadians(coordinates2.latitude)) *
-                   Math.sin(dLon/2) * Math.sin(dLon/2);
+        let a =
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(this.toRadians(coordinates1.lat)) * Math.cos(this.toRadians(coordinates2.latitude)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
 
         let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 

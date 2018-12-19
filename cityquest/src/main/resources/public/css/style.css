@@ -103,3 +103,11 @@ body {
 #gameList > .list-group-item + li.expanded {
     display: block;
 }
+
+#formAddGame {
+    width: 40%;
+}
+
+.invisible {
+    display: none;
+}

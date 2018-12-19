@@ -7,8 +7,8 @@ export function Question(question, extraInformation, coordinates, correctAnswer,
 }
 
 export function Coordinates(lon, lat){
-    this.lon = lon;
-    this.lat = lat;
+    this.lon = Number.parseFloat(lon);
+    this.lat = Number.parseFloat(lat);
 }
 
 export function Game(name, location, description, coordinates, questions){
