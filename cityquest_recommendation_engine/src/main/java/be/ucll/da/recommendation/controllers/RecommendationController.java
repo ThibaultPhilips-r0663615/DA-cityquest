@@ -5,13 +5,10 @@ import be.ucll.da.recommendation.model.RecommendedItem;
 import be.ucll.da.recommendation.model.SlopeOne;
 import be.ucll.da.recommendation.model.User;
 import be.ucll.da.recommendation.repository.RecommendedItemRepository;
-import com.sun.xml.internal.ws.resources.StreamingMessages;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 

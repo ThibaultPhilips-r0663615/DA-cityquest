@@ -65,7 +65,7 @@ class GameList extends AbstractCQElement {
     get template() {
         return `
             <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>
-            <link rel="stylesheet" href="../css/style.css"/>
+            <link rel="stylesheet" href="./css/style.css"/>
             
             <h3>Games</h3>
             

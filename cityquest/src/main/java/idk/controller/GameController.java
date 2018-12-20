@@ -82,7 +82,7 @@ public class GameController {
 
     private GameRecommendations getRecommendations(String emailAddress) throws ServiceUnavailableException {
         URI service = recommendationServiceUrl()
-            .map(s -> s.resolve("/recommend/" + emailAddress))
+            .map(s -> s.resolve("/recommendation/recommend/" + emailAddress))
             .orElseThrow(ServiceUnavailableException::new);
 
         return restTemplate
@@ -90,7 +90,7 @@ public class GameController {
                 .getBody();
     }
 
-    public Optional<URI> recommendationServiceUrl() {
+    private Optional<URI> recommendationServiceUrl() {
         try {
             return Optional.of(new URI("http://localhost:8081"));
         } catch (URISyntaxException e) {
@@ -98,7 +98,7 @@ public class GameController {
         }
     }
 
-//    public Optional<URI> recommendationServiceUrl() {
+//    private Optional<URI> recommendationServiceUrl() {
 //        return discoveryClient.getInstances("recommendation")
 //                .stream()
 //                .map(si -> si.getUri())

@@ -25,7 +25,7 @@ class CityQuestGameDetails extends AbstractCQElement {
         this.byId("gameDescription").innerHTML  = game.description;
         this.byId("gameLatitude").innerHTML     = game.coordinates.lat;
         this.byId("gameLongitude").innerHTML    = game.coordinates.lon;
-        
+
         let mapDiv = this.byId('map');
         this.map = L.map(mapDiv, {center: [game.coordinates.lat, game.coordinates.lon], zoom: 14, zoomSnap: 0.1});
         L
@@ -33,7 +33,7 @@ class CityQuestGameDetails extends AbstractCQElement {
             .addTo(this.map);
 
         let questionIcon = L.icon({
-            iconUrl: '../images/marker_black.png',
+            iconUrl: './images/marker_black.png',
             iconSize: [40, 45],
             iconAnchor: [20, 45]
         });
@@ -56,7 +56,7 @@ class CityQuestGameDetails extends AbstractCQElement {
             this.currentLocation.setLatLng([coords.latitude, coords.longitude]);
         } else {
             let currentLocationIcon = L.icon({
-                iconUrl: '../images/marker_red.png',
+                iconUrl: './images/marker_red.png',
                 iconSize: [40, 45],
                 iconAnchor: [20, 45]
             });
@@ -77,7 +77,7 @@ class CityQuestGameDetails extends AbstractCQElement {
         return `
             <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"/>
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
-            <link rel="stylesheet" href="../css/style.css"/>
+            <link rel="stylesheet" href="./css/style.css"/>
             
             <h3>Game details</h3>
             <div id="game">
@@ -89,8 +89,8 @@ class CityQuestGameDetails extends AbstractCQElement {
             </div>
             
             <div id="information">
-                <div><img src="../images/marker_red.png"><p> Your location!</p></div>
-                <div><img src="../images/marker_black.png"><p> The location of the question!</p></div>
+                <div><img src="./images/marker_red.png"><p> Your location!</p></div>
+                <div><img src="./images/marker_black.png"><p> The location of the question!</p></div>
             </div>
 
             <cq-show-question id="question"></cq-show-question>

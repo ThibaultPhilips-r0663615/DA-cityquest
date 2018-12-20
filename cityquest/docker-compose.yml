@@ -13,17 +13,30 @@ services:
   consul:
     image: consul
     restart: unless-stopped
-      ports:
-        - 8500:8500
-
-  den-travak:
-    image: den-travak-app:0.0.1-SNAPSHOT
-    restart: unless-stopped
     ports:
-      - 8123:8080
+      - 8500:8500
+    labels:
+      - "traefik.port=8500"
+      - "traefik.frontend.rule=PathPrefix:/consul/"
+
+  city-quest:
+    image: city-quest-app:0.0.1-SNAPSHOT
+    restart: unless-stopped
+    depends_on:
+      - consul
+    ports:
+      - 8234:8080
+    labels:
+      - "traefik.port=8080"
+      - "traefik.frontend.rule=PathPrefix:/city-quest/"
 
   recommendation:
     image: recommendation-app:0.0.1-SNAPSHOT
     restart: unless-stopped
+    depends_on:
+      - consul
     ports:
-      - 8124:8080
+      - 8235:8081
+    labels:
+      - "traefik.port=8081"
+      - "traefik.frontend.rule=PathPrefix:/recommendation/"
