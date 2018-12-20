@@ -25,7 +25,7 @@ public class AbstractControllerIT {
 	@LocalServerPort
 	private int port;
 
-	TestRestTemplate restTemplate = new TestRestTemplate();
+	TestRestTemplate restTemplate;
 
 	HttpHeaders headers;
 

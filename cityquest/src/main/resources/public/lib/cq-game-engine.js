@@ -34,13 +34,13 @@ export default class CityQuestGameEngine {
         let score = { gameId: this.gameInstance.id, startTime: this.startTime, endTime: new Date(), answersCorrect: this.score};
 
         return fetch(backendUrl + "/scores",
-        {
-            method: "POST",
-            headers:{
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(score)
-        })
+            {
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(score)
+            })
             .thenFetch(backendUrl + "/scores/" + this.gameInstance.id)
             .then(response => response.json());
     }

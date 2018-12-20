@@ -1,9 +1,12 @@
 spring:
   application:
-    name: dentravak
+    name: recommendation
 #  cloud:
 #    consul:
+#      port: 8500
 #      discovery:
 #        instanceId: ${spring.application.name}:${random.value}
 #        healthCheckPath: /health-check
 #        healthCheckInterval: 20s
+server:
+  port: 8081

@@ -31,7 +31,7 @@ public class GameControllerIT extends AbstractControllerIT {
 	}
 
 	@Test
-	public void testPostGame() throws JSONException {
+	public void testPostGame() {
 		Game game = aDefaultGame().build();
 
 		String actualGameAsJson = httpPost("/games", game);
@@ -41,24 +41,24 @@ public class GameControllerIT extends AbstractControllerIT {
 	}
 
 	@Test
-	public void testPutGame() throws JSONException, IOException {
+	public void testPutGame() throws IOException {
 		Game game = aDefaultGame().build();
 
 		String actualGameAsJson = httpPost("/games", game);
 		Game savedGame = new ObjectMapper().readValue(actualGameAsJson, Game.class);
 
 		savedGame.setName("Updated game name");
-		String updatedGameAsJson = httpPut("/games/" + savedGame.getId(), savedGame);
+		String actualUpdatedGameAsJson = httpPut("/games/" + savedGame.getId(), savedGame);
 
-		String expectedGameAsJson = jsonTestFile("testGameUpdatedName.json");
-		assertThatJson(updatedGameAsJson).isEqualTo(expectedGameAsJson);
+		String expectedUpdatedGameAsJson = jsonTestFile("testGameUpdatedName.json");
+		assertThatJson(actualUpdatedGameAsJson).isEqualTo(expectedUpdatedGameAsJson);
 	}
 
 	@Test
-	public void testGetGames_WithSavedGame_ListWithSavedGame() throws JSONException {
+	public void testGetGames_WithSavedGame_ListWithSavedGame() {
 		Game game = aDefaultGame().build();
 
-		httpPost("/games", game);
+		gameRepository.save(game);
 
 		String actualGames = httpGet("/games");
 		String expectedGames = jsonTestFile("testGameList.json");

@@ -21,3 +21,7 @@ Promise.prototype.thenFetch = function(src) {
         });
     }.bind(this));
 };
+
+function queryString (params) {
+    return params ? '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&') : "";
+}
