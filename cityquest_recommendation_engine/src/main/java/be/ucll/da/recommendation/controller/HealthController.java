@@ -1,4 +1,4 @@
-package be.ucll.da.recommendation.controllers;
+package be.ucll.da.recommendation.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

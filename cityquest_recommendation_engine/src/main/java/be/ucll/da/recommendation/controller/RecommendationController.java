@@ -1,4 +1,4 @@
-package be.ucll.da.recommendation.controllers;
+package be.ucll.da.recommendation.controller;
 
 import be.ucll.da.recommendation.model.Item;
 import be.ucll.da.recommendation.model.RecommendedItem;
