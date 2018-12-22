@@ -1,5 +1,9 @@
 package idk.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,12 +19,14 @@ public class Score {
     @GeneratedValue
     private UUID id;
     private UUID gameId;
+    @JsonSerialize(using = ToStringSerializer.class)
     private LocalDateTime startTime, endTime;
     private int answersCorrect;
 
     public Score() {
     }
-    
+
+    @JsonIgnore
     public long getDurationInSeconds(){
         return startTime.until(endTime, SECONDS);
     }
@@ -65,44 +71,53 @@ public class Score {
         return answersCorrect;
     }
     
-    public static class GameScoreBuilder {
+    public static class ScoreBuilder {
         private UUID gameId;
         private LocalDateTime startTime, endTime;
         private int answersCorrect;
 
-        public GameScoreBuilder() {
+        public ScoreBuilder() {
             
         }
 
-        public GameScoreBuilder withGameId(UUID gameId) {
+        public ScoreBuilder withGameId(UUID gameId) {
             this.gameId = gameId;
             return this;
         }
 
-        public GameScoreBuilder withStartTime(LocalDateTime startTime) {
+        public ScoreBuilder withStartTime(LocalDateTime startTime) {
             this.startTime = startTime;
             return this;
         }
 
-        public GameScoreBuilder withEndTime(LocalDateTime endTime) {
+        public ScoreBuilder withEndTime(LocalDateTime endTime) {
             this.endTime = endTime;
             return this;
         }
 
-        public GameScoreBuilder withAnswersCorrect(int answersCorrect) {
+        public ScoreBuilder withAnswersCorrect(int answersCorrect) {
             this.answersCorrect = answersCorrect;
             return this;
         }
 
-        public static GameScoreBuilder aGameScore(){
-            return new GameScoreBuilder();
+        public static ScoreBuilder aScore(){
+            return new ScoreBuilder();
+        }
+
+        public static ScoreBuilder aDefaultScore(){
+            return aScore()
+                    .withAnswersCorrect(5)
+                    .withGameId(UUID.fromString("11364853-e39c-43ff-ab16-1e0abea4c0ae"))
+                    .withStartTime(LocalDateTime.parse("2018-12-24T10:15:13.123"))
+                    .withEndTime(LocalDateTime.parse("2018-12-24T18:24:36.456"));
         }
 
         public Score build(){
             Score score = new Score();
+            score.answersCorrect = this.answersCorrect;
+            score.gameId = this.gameId;
             score.startTime = this.startTime;
             score.endTime = this.endTime;
-            score.answersCorrect = this.answersCorrect;
             return score;
         }
     }

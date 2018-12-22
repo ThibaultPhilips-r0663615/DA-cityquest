@@ -1,0 +1,35 @@
+[
+  {
+    "id": "${json-unit.ignore}",
+    "name": "Overijse today",
+    "location": "Overijse",
+    "description": "A walk in the historic village of Overijse!",
+    "coordinates": {
+      "lon": 4.534750000000031,
+      "lat": 50.77381
+    },
+    "questions": []
+  },
+  {
+    "id": "${json-unit.ignore}",
+    "name": "Leuven Treasure Hunt",
+    "location": "Leuven",
+    "description": "Follow the map of questions and find the treasure!",
+    "coordinates": {
+      "lon": 4.7005,
+      "lat": 50.8798
+    },
+    "questions": []
+  },
+  {
+    "id": "${json-unit.ignore}",
+    "name": "Explore Leuven",
+    "location": "Leuven",
+    "description": "Visit historic places around Leuven such as the vaartkom, city town hall, ...!",
+    "coordinates": {
+      "lon": 4.7005167,
+      "lat": 50.8798438
+    },
+    "questions": []
+  }
+]

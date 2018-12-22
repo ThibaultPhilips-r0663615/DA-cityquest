@@ -124,7 +124,7 @@ public class Game {
             return new GameBuilder();
         }
 
-        public static GameBuilder aDefaultGame() {
+        public static GameBuilder aDefaultGameA() {
             return aGame().withName("Leuven Treasure Hunt")
                     .withLocation("Leuven")
                     .withCoordinates(4.7005, 50.8798)
@@ -145,6 +145,49 @@ public class Game {
                             .withAnswer("266")
                             .withCorrectAnswer(2)
                             .withExtraInformation("15th-century, Gothic-style, former municipal headquarters with spires & 236 sculptures on the walls."));
+        }
+
+        public static GameBuilder aDefaultGameB(){
+            return aGame()
+                    .withName("Overijse today")
+                    .withLocation("Overijse")
+                    .withDescription("A walk in the historic village of Overijse!")
+                    .withCoordinates(4.534750000000031,50.77381)
+                    .withQuestion(
+                            aQuestion()
+                                    .withQuestion("Why did the town hall change location?")
+                                    .withAnswer("Too expensive to maintain the building.")
+                                    .withAnswer("Too small for all the employees.")
+                                    .withCoordinates(4.53766148622,50.773242668)
+                                    .withCorrectAnswer(1)
+                                    .withExtraInformation("Question extra info"));
+        }
+
+        public static GameBuilder aDefaultGameC(){
+            return aGame()
+                    .withName("Explore Leuven")
+                    .withLocation("Leuven")
+                    .withDescription("Visit historic places around Leuven such as the vaartkom, city town hall, ...!")
+                    .withCoordinates(4.7005167, 50.8798438)
+                    .withQuestion(
+                            aQuestion()
+                                    .withQuestion("How old is the vaartkom?")
+                                    .withAnswer("200 years")
+                                    .withAnswer("40 years")
+                                    .withAnswer("300 years")
+                                    .withCoordinates(4.7031076,50.8876555)
+                                    .withCorrectAnswer(3)
+                                    .withExtraInformation("Question extra info")
+                    )
+                    .withQuestion(
+                            aQuestion()
+                                    .withQuestion("Why did the 'Foche plein' change name?")
+                                    .withAnswer("World war II reason.")
+                                    .withAnswer("Ugly name")
+                                    .withCoordinates(4.70258300,50.8791616)
+                                    .withCorrectAnswer(1)
+                                    .withExtraInformation("Question extra info")
+                    );
         }
 
         public Game build(){

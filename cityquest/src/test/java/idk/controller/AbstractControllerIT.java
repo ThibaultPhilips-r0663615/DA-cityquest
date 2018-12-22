@@ -37,34 +37,31 @@ public class AbstractControllerIT {
 				.setReadTimeout(5000));
 	}
 
-	protected String httpGet(String url) {
+	protected ResponseEntity<String> httpGet(String url) {
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
-		ResponseEntity<String> response = restTemplate.exchange(
+		return restTemplate.exchange(
 				createURLWithPort(url),
 				HttpMethod.GET, entity, String.class);
-
-		return response.getBody();
 	}
 
-	protected String httpPost(String url, Object obj) {
+	protected ResponseEntity<String> httpPost(String url, Object obj) {
 		return httpRequest(url, obj, HttpMethod.POST);
 	}
 
-	protected String httpPut(String url, Object obj){
+	protected ResponseEntity<String> httpPut(String url, Object obj){
 		return httpRequest(url, obj, HttpMethod.PUT);
 	}
 
-	private String httpRequest(String url, Object obj, HttpMethod method){
+	private ResponseEntity<String> httpRequest(String url, Object obj, HttpMethod method){
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			HttpEntity<String> entity = new HttpEntity<String>(mapper.writeValueAsString(obj), headers);
+			String payload = mapper.writeValueAsString(obj);
+			HttpEntity<String> entity = new HttpEntity<String>(payload, headers);
 
-			ResponseEntity<String> response = restTemplate.exchange(
+			return restTemplate.exchange(
 					createURLWithPort(url),
 					method, entity, String.class);
-
-			return response.getBody();
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
@@ -80,6 +77,6 @@ public class AbstractControllerIT {
 
 	private String createURLWithPort(String uri) {
 		if(uri.startsWith("http")) return uri;
-		return "http://localhost:" + port + uri;
+		return "http://localhost:" + port + "/city-quest" + uri;
 	}
 }
