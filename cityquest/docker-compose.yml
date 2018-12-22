@@ -3,11 +3,13 @@ version: '3'
 services:
   traefik:
     image: traefik
-    command: --api --docker # Enables the web UI and tells Træfik to listen to docker
+    command: --api --docker --configFile=/etc/traefik/traefik.toml # Enables the web UI, tells Træfik to listen to docker and reads config file
     ports:
-      - "8080:80"     # The HTTP port
+      - "8080:443"    # The HTTPS port
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./cert:/cert
+      - ./traefik:/etc/traefik
 
   consul:
     image: consul
