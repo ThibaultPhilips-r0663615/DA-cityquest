@@ -3,21 +3,26 @@ import AbstractCQElement from './cq-element.js';
 class CityQuestResultScreen extends AbstractCQElement {
 
     showResult(gameEngine){
-        gameEngine.fetchResult().then( result => {
-            this.shadowRoot.innerHTML = this.resultTemplate;
+        gameEngine
+            .fetchResult()
+            .then(
+                result =>
+                {
+                    this.shadowRoot.innerHTML = this.resultTemplate;
 
-            this.byId('GameDuration').innerHTML         = gameEngine.duration + 's';
-            this.byId('GameScore').innerHTML            = gameEngine.score;
-            this.byId('GameDurationAverage').innerHTML  = result.averageDurationInSeconds + 's';
-            this.byId('GameScoreAverage').innerHTML     = result.averageAnswersCorrect;
+                    this.byId('GameDuration').innerHTML         = gameEngine.duration + 's';
+                    this.byId('GameScore').innerHTML            = gameEngine.score;
+                    this.byId('GameDurationAverage').innerHTML  = result.averageDurationInSeconds + 's';
+                    this.byId('GameScoreAverage').innerHTML     = result.averageAnswersCorrect;
 
-            this.byId("backButton").addEventListener("click", () => {
-                document.getElementById("ResultScreenModal").remove();
-                this.app.router.navigate('/home')
-            });
+                    this.byId("backButton").addEventListener("click", () => {
+                        document.getElementById("ResultScreenModal").remove();
+                        this.app.router.navigate('/home')
+                    });
 
-            $(this.shadowRoot.getElementById("ResultScreenModal")).modal('show');
-        });
+                    $(this.shadowRoot.getElementById("ResultScreenModal")).modal('show');
+                }
+        );
     }
 
     get resultTemplate() {

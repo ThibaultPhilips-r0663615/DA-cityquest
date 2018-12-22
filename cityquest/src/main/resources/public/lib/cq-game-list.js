@@ -5,19 +5,19 @@ class GameList extends AbstractCQElement {
 
     init(){
         this.initEventListeners();
-        this.fetchFromUrl("/games");
+        this.fetchGameList("/games");
     }
 
     initEventListeners(){
         this.byId("nearest").addEventListener('click',
             () => navigator.geolocation.getCurrentPosition(
-                position => this.fetchFromUrl("/games/nearest", { latitude : position.coords.latitude, longitude : position.coords.longitude })));
+                position => this.fetchGameList("/games/nearest", { latitude : position.coords.latitude, longitude : position.coords.longitude })));
 
         this.byId("recommendation").addEventListener('click',
-            () => this.fetchFromUrl("/games/recommendations", { email : this.byId("email").value}));
+            () => this.fetchGameList("/games/recommendations", { email : this.byId("email").value}));
     }
 
-    fetchFromUrl(url, params){
+    fetchGameList(url, params){
         fetch(backendUrl + url + queryString(params))
             .then(response => response.json())
             .then(json => this.showGameList(json));

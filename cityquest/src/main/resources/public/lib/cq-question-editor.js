@@ -24,7 +24,12 @@ class GameQuestionEditor extends AbstractCQElement {
     }
 
     verifyQuestion(){
-        let answers = Array.from(this.byId("answers").children, child => child.value).filter(answer => answer !== null && answer !== "");
+        let answers = Array
+            .from(
+                this.byId("answers").children,
+                child => child.value
+            )
+            .filter(answer => answer !== null && answer !== "");
 
         this.question = new Question(
             this.byId("inputQuestion").value,

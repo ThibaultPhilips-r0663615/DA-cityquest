@@ -46,12 +46,12 @@ class CityQuestGameDetails extends AbstractCQElement {
 
 
         this.geoLocationWatchID = navigator.geolocation.watchPosition(
-            (position) => this.showOnMap(position.coords),
+            (position) => this.updateLocationAndQuestion(position.coords),
             (error) => console.error(error),
             { enableHighAccuracy: true, timeout: 5000, maximumAge: 5000 });
     }
 
-    showOnMap(coords) {
+    updateLocationAndQuestion(coords) {
         if(this.currentLocation) {
             this.currentLocation.setLatLng([coords.latitude, coords.longitude]);
         } else {
