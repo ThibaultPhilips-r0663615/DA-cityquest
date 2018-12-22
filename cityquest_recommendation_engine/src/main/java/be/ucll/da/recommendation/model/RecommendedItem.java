@@ -1,28 +1,19 @@
 package be.ucll.da.recommendation.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
+@IdClass(RecommendedItem.RecommendedItemKey.class)
 public class RecommendedItem {
 
     @Id
-    @GeneratedValue
-    private UUID id;
     private UUID ratedItem;
+    @Id
     private String emailAddress;
+
     private float rating;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getEmailAddress() {
         return emailAddress;
@@ -46,5 +37,10 @@ public class RecommendedItem {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public static class RecommendedItemKey implements Serializable {
+        private UUID ratedItem;
+        private String emailAddress;
     }
 }

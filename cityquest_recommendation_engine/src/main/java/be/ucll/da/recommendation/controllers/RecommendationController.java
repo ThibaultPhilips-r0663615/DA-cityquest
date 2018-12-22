@@ -38,7 +38,11 @@ public class RecommendationController {
     private Map<Item, Float> getUserPreferences(String emailAddress) {
         return StreamSupport
                 .stream(repository.findAllByEmailAddress(emailAddress).spliterator(), false)
-                .collect(Collectors.toMap(recommendedItem -> new Item(recommendedItem.getRatedItem()), RecommendedItem::getRating));
+                .collect(Collectors.toMap(
+                        recommendedItem -> new Item(recommendedItem.getRatedItem()),
+                        RecommendedItem::getRating
+                        )
+                );
     }
 
     private SlopeOne getSlopeOnePredictionMachine() {

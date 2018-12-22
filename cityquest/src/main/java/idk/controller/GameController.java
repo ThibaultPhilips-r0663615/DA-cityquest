@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.naming.ServiceUnavailableException;
@@ -75,7 +76,7 @@ public class GameController {
                     .limit(10)
                     .peek(game -> game.setQuestions(new ArrayList<>()))
                     .collect(Collectors.toList());
-        } catch (ServiceUnavailableException e){
+        } catch (ServiceUnavailableException | RestClientException e){
             return getGames();
         }
     }
