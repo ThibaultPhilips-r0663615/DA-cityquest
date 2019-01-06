@@ -7,7 +7,7 @@ import idk.model.Coordinates;
 import idk.model.Game;
 import idk.model.GameRecommendations;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
@@ -27,7 +27,7 @@ import java.util.stream.StreamSupport;
 @RestController
 public class GameController {
 
-    //@Autowired private DiscoveryClient discoveryClient;
+    @Autowired private DiscoveryClient discoveryClient;
     @Autowired private GameRepository gameRepository;
     @Autowired private RestTemplate restTemplate;
 
@@ -91,20 +91,20 @@ public class GameController {
                 .getBody();
     }
 
-    private Optional<URI> recommendationServiceUrl() {
-        try {
-            return Optional.of(new URI("http://localhost:8081"));
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 //    private Optional<URI> recommendationServiceUrl() {
-//        return discoveryClient.getInstances("recommendation")
-//                .stream()
-//                .map(si -> si.getUri())
-//                .findFirst();
+//        try {
+//            return Optional.of(new URI("http://localhost:8081"));
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
 //    }
+
+    private Optional<URI> recommendationServiceUrl() {
+        return discoveryClient.getInstances("recommendation")
+                .stream()
+                .map(si -> si.getUri())
+                .findFirst();
+    }
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Game not found")
     private class GameNotFoundException extends RuntimeException {

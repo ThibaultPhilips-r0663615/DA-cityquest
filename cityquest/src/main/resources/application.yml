@@ -1,14 +1,14 @@
 spring:
   application:
     name: city-quest
-#  cloud:
-#    consul:
-#      host: consul
-#      port: 8500
-#      discovery:
-#        instanceId: ${spring.application.name}:${random.value}
-#        healthCheckPath: ${server.servlet.context-path}/health-check
-#        healthCheckInterval: 20s
+  cloud:
+    consul:
+      host: consul
+      port: 8500
+      discovery:
+        instanceId: ${spring.application.name}:${random.value}
+        healthCheckPath: ${server.servlet.context-path}/health-check
+        healthCheckInterval: 20s
 server:
   port: 8080
   servlet:

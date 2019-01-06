@@ -1,2 +1,2 @@
-let backendUrl = 'http://localhost:8080/city-quest';
-let recommendationUrl = 'http://localhost:8081/recommendation';
+let backendUrl = 'https://da.wouter-engelen.sb.uclllabs.be:10328/city-quest';
+let recommendationUrl = 'https://da.wouter-engelen.sb.uclllabs.be:10328/recommendation';
